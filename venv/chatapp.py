@@ -6,28 +6,64 @@ from streamlit_chat import message as msg
 from translate import Translator
 from pydub import AudioSegment
 from pydub.playback import play
+import os
+from dotenv import load_dotenv
+# Load environment variables from .env file
+load_dotenv()
 
 openai.api_key = os.getenv("JBRG_OPEN_AI")
-openai.api_key = "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"
 
-# Apply custom CSS styles inline
-def change_css(font_family, background_color):
-    css = f"""
+# Set page configuration
+st.set_page_config(
+    page_title="Maya Lingo",
+    page_icon="/Users/jasons/PycharmProjects/pythonProject/venv/static/jedburghlogo_webicon.png",
+    layout="wide",
+    initial_sidebar_state="expanded"
+)
+# Apply styles
+streamlit_style = """
     <style>
-        body {{
-            font-family: {font_family};
-            background-color: {background_color};
-        }}
-    </style>
-    """
-    st.write(css, unsafe_allow_html=True)
+    @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono&display=swap');
 
-change_css("IBM Plex Mono", "#4F5223")
+    html, body, [class*="css"] {
+        font-family: 'IBM Plex Mono', monospace;
+        background: #4F5223;
+    }
+
+    .custom-title {
+        overflow: hidden;
+        color: white;
+        font-size: 1.3em;
+        animation: typewriter 4s steps(50) 1s both;
+        white-space: nowrap;
+        padding-bottom: 50px;
+    }
+    @keyframes typewriter {
+        0% {
+            width: 0;
+        }
+        100% {
+            width: 100%;
+        }
+    }
+    </style>
+"""
+
+
+
+
+
+st.markdown(streamlit_style, unsafe_allow_html=True)
+st.markdown('<h1 class="custom-title">WELCOME, AIRMAN ALLIE</h1>', unsafe_allow_html=True)
+
+
+
 
 # Define the initial context for role-playing
 
-st.title("ChatGPT Arabic")
-task_selection = st.selectbox("Select Task-Based AI",
+
+st.subheader("ChatGPT عربي")
+task_selection = st.selectbox("CHOOSE AN AI:",
                               ["Speaking with: Hamza, Cafe Owner", "Speaking with: Lael, Airline Ticket Official"])
 st.write("***")
 
