@@ -11,7 +11,7 @@ from dotenv import load_dotenv
 # Load environment variables from .env file
 load_dotenv()
 
-openai.api_key = os.getenv("JBRG_OPEN_AI")
+api_key = os.getenv("JBRG_OPEN_AI")
 
 # Set page configuration
 st.set_page_config(
