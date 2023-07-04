@@ -46,13 +46,17 @@ btn_enter = st.button("Enter")
 if btn_enter:
     st.session_state.hst_chat.append({"role": "user", "content": user_prompt})
 
-    # Load the specific words from the text file
-    word_file_path = "tcv.txt"
-    with open(word_file_path, "r", encoding="utf-8") as file:
+    # Check if any word from the tcv.txt file is present in the user input
+    tcv_file_path = "/Users/jasons/PycharmProjects/pythonProject/venv/tcv.txt"
+    with open(tcv_file_path, "r", encoding="utf-8") as file:
         specific_words = [word.strip() for word in file.readlines()]
 
-    # Check if any of the specific words are present in the user input
-    if any(word in user_prompt for word in specific_words):
+    user_input_words = user_prompt.split()  # Split the user input into individual words
+
+    # Check if any word from the tcv.txt file is present in the user input
+    matching_words = set(specific_words).intersection(user_input_words)
+
+    if matching_words:
         # Play the ding sound
         ding_sound_path = "/Users/jasons/PycharmProjects/pythonProject/venv/audio/tcv_match.mp3"
         ding_sound = AudioSegment.from_file(ding_sound_path)
@@ -84,4 +88,3 @@ if len(st.session_state.get('hst_chat', [])) > 0:
                 else:
                     translation = translation_result.text
                 st.write(translation)
-
