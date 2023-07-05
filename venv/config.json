@@ -1,0 +1,10 @@
+{
+  "task_selection": [
+    "Hamza, Cafe Owner",
+    "Lael, Airline Ticket Official"
+  ],
+  "initial_context": {
+    "Hamza, Cafe Owner": "You are the owner of a popular Cafe in Baghdad, Iraq...",
+    "Lael, Airline Ticket Official": "You are a customer service representative at an airline ticket office..."
+  }
+}
