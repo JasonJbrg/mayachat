@@ -77,7 +77,14 @@ if 'custom_title' not in st.session_state:
 app_name = st.session_state.custom_title
 
 # Create subheader
-st.subheader("Chat عربي")
+st.markdown("""
+    <div style='border: 2px solid white; padding: 10px;'>
+        <h2 style='margin: 0; font-size: 14px; padding: 1em; font-family: 'IBM Plex Mono', monospace;'>Hamza, Cafe Owner</h2>
+    </div>
+""", unsafe_allow_html=True)
+
+
+
 
 # Set default task
 if 'selected_task' not in st.session_state:
@@ -203,9 +210,12 @@ if btn_enter:
 if st.session_state.hst_chat:
     for i in range(len(st.session_state.hst_chat)):
         if i % 2 == 0:
-            msg("You: " + st.session_state.hst_chat[i]['content'], is_user=True)
+            # msg("You: " + st.session_state.hst_chat[i]['content'], is_user=True)
+            st.markdown(f"<div style='text-align: left; color: black; background-color: rgba(206, 187, 163, 0.5); '>You: {st.session_state.hst_chat[i]['content']}</div>", unsafe_allow_html=True)
         else:
-            msg(st.session_state.selected_task + ": " + st.session_state.hst_chat[i]['content'])
+            # msg(st.session_state.selected_task + ": " + st.session_state.hst_chat[i]['content'])
+            st.markdown(f"<div style='text-align: left; color: black; background-color: rgba(206, 187, 163, 1.0);'>{st.session_state.selected_task}: {st.session_state.hst_chat[i]['content']}</div>", unsafe_allow_html=True)
+
 
     # Translation button for user input
         if i % 2 == 0:
@@ -274,4 +284,3 @@ if st.session_state.hst_chat:
             file_name=f.name,
             mime='application/vnd.openxmlformats-officedocument.wordprocessingml.document'
         )
-
