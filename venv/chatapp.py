@@ -15,7 +15,8 @@ from datetime import datetime
 
 
 # Load environment variables from .env file
-load_dotenv()
+load_dotenv("/Users/jasons/PycharmProjects/pythonProject/PycharmProjects/.env")
+
 
 # Read the config.json file
 with open("config.json") as file:
@@ -29,7 +30,7 @@ initial_context = {
 }
 
 load_dotenv()  # take environment variables from .env.
-openai.api_key = os.getenv('OPENAI_KEY')
+openai.api_key = os.getenv('OPENAI_API_KEY')
 
 # Set page configuration
 st.set_page_config(
