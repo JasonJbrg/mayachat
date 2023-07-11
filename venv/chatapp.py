@@ -28,8 +28,8 @@ initial_context = {
     for task in task_selection
 }
 
-# Setting OpenAI API key
-openai.api_key = "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"
+load_dotenv()  # take environment variables from .env.
+openai.api_key = os.getenv('OPENAI_KEY')
 
 # Set page configuration
 st.set_page_config(
