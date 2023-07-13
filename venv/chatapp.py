@@ -189,6 +189,9 @@ if btn_enter and user_prompt:
     st.session_state.hst_chat.append({"role": "user", "content": user_prompt_translated})
     st.session_state.hst_chat_time.append(datetime.now())
 
+    # Add user's translated response to the conversation
+    conversation.append({"role": "user", "content": user_prompt_translated})
+
     # Only generate a response if the last message was from the user
     if st.session_state.hst_chat[-2]["role"] == "user":
         # Use OpenAI API to get a response from the chat model
