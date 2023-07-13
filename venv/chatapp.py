@@ -66,19 +66,12 @@ streamlit_style = """
         padding-bottom: 50px;
 
     }
-
-       /* Hide the Streamlit footer */
+         /* Hide the Streamlit footer */
     .reportview-container .main footer {
         visibility: hidden;
     }
 
-     /* Hide the Streamlit menu */
-    #MainMenu {
-        visibility: hidden;
-    
-
     }
-      
     @keyframes typewriter {
         0% {
             width: 0;
