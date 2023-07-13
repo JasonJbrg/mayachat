@@ -16,7 +16,8 @@ import random
 
 
 # Load environment variables from .env file
-load_dotenv()
+dotenv_path = "PycharmProjects/.env"
+load_dotenv(dotenv_path)
 
 
 # Read the config.json file
@@ -35,8 +36,8 @@ greetings = config["greetings"]
 load_dotenv('/Users/jasons/PycharmProjects/pythonProject/PycharmProjects/.env')
   # take environment variables from .env.
 
-api_key = st.secrets["OPENAI_API_KEY"]
-openai.api_key = api_key
+# Set OpenAI API key
+openai.api_key = os.getenv("OPENAI_API_KEY")
 
 
 # Set page configuration
