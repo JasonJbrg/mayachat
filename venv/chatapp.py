@@ -193,7 +193,7 @@ if btn_enter and user_prompt:
     user_prompt_translated = translator_to_en.translate(user_prompt)
 
     # Add user's translated response to the chat history
-    st.session_state.hst_chat.append({"role": "user", "content": user_prompt_translated})
+    st.session_state.hst_chat.append({"role": "user", "content": user_prompt})
     st.session_state.hst_chat_time.append(datetime.now())
 
     # Add user's translated response to the conversation
