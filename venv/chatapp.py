@@ -156,7 +156,7 @@ MAX_TOKENS_PER_MESSAGE = 50
 
 # Define a function to get the initial context
 def get_initial_context(task):
-    if task in initial_context:
+    if task is not None and task in initial_context:
         return initial_context[task]
     else:
         return "Please select a task."
