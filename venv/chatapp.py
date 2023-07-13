@@ -155,7 +155,7 @@ MAX_TOKENS = 500
 MAX_TOKENS_PER_MESSAGE = 50
 
 # Prepare the conversation for the chat model
-if st.session_state.selected_task is not None:
+if 'selected_task' in st.session_state and st.session_state.selected_task is not None:
     conversation = [
         {"role": "assistant", "content": initial_context[st.session_state.selected_task]},
     ] + st.session_state.hst_chat
