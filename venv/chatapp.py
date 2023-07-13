@@ -13,12 +13,9 @@ from docx import Document
 from datetime import datetime
 import random
 
-
-
 # Load environment variables from .env file
 dotenv_path = "PycharmProjects/.env"
 load_dotenv(dotenv_path)
-
 
 # Read the config.json file
 with open("venv/config.json") as file:
@@ -32,13 +29,10 @@ initial_context = {
 }
 greetings = config["greetings"]
 
-
 load_dotenv('/Users/jasons/PycharmProjects/pythonProject/PycharmProjects/.env')
-  # take environment variables from .env.
 
 # Set OpenAI API key
 openai.api_key = os.getenv("OPENAI_API_KEY")
-
 
 # Set page configuration
 st.set_page_config(
@@ -117,8 +111,7 @@ if selected_language != 'Select...':
     if selected_task != 'Select...':
         st.session_state.selected_task = selected_task
 else:
-    st.write("Please select a language first.")
-
+    st.session_state.selected_task = None  # Set to None or some default value
 
 # Initialize two Translator objects with appropriate language settings
 translator_to_en = Translator(from_lang=languages[selected_language], to_lang="en")
@@ -145,8 +138,6 @@ if selected_task != 'Select...' and 'greeting_sent' not in st.session_state:
 # Update the selected task in session state
 st.session_state.selected_task = selected_task
 
-
-
 # Initialize chat history in session state if not already present
 if 'hst_chat' not in st.session_state:
     st.session_state.hst_chat = []
@@ -162,10 +153,26 @@ btn_enter = st.button("Enter")
 
 MAX_TOKENS = 500
 MAX_TOKENS_PER_MESSAGE = 50
+
+# Define a function to get the initial context
+def get_initial_context(task):
+    if task is not None and task in initial_context:
+        return initial_context[task]
+    else:
+        return "Please select a task."
+        
 # Prepare the conversation for the chat model
-conversation = [
-      {"role": "assistant", "content": initial_context[st.session_state.selected_task]},
-] + st.session_state.hst_chat
+if 'selected_task' in st.session_state and st.session_state.selected_task is not None and st.session_state.selected_task in initial_context:
+    conversation = [
+        {"role": "assistant", "content": initial_context[st.session_state.selected_task]},
+    ] + st.session_state.hst_chat
+else:
+    # Handle case where st.session_state.selected_task is None or does not exist in initial_context
+    conversation = [
+        {"role": "assistant", "content": "Please select a valid task."},
+    ] + st.session_state.hst_chat
+
+
 
 # When 'Enter' button is clicked
 if btn_enter and user_prompt:
@@ -191,25 +198,7 @@ if btn_enter and user_prompt:
         st.session_state.hst_chat.append({"role": "assistant", "content": assistant_response})
         st.session_state.hst_chat_time.append(datetime.now())
 
-    # Load specific words from tcv.txt file
-    # with open("venv/tcv.txt", "r", encoding="utf-8") as file:
-    #    specific_words = [word.strip() for word in file.readlines()]
-
-    # Check if user's input has any of the specific words
-    # If yes, play ding sound
-    # user_input_words = user_prompt.split()
-    # matching_words = set(specific_words).intersection(user_input_words)
-    # if matching_words:
-    #   ding_sound_path = "venv/audio/tcv_match.mp3"
-    #  ding_sound = AudioSegment.from_file(ding_sound_path)
-    # play(ding_sound)
-
     # ...
-    # ...
-    # ...
-    # ...
-
-
 
     # Calculate the total number of tokens in the conversation
     total_tokens = sum(len(message['content'].split()) for message in conversation)
@@ -283,39 +272,34 @@ if btn_enter and user_prompt:
         st.session_state.hst_chat_time.append(datetime.now())
 
     # ...
-    # ...
-    # ...
-    # ...
 
 # Display chat history
 if st.session_state.hst_chat:
     for i in range(len(st.session_state.hst_chat)):
         if st.session_state.hst_chat[i]["role"] == "user":
-            # msg("You: " + st.session_state.hst_chat[i]['content'], is_user=True)
             st.markdown(
                 f"<div style='text-align: left; color: black; background-color: rgba(206, 187, 163, 0.5); '>You: {st.session_state.hst_chat[i]['content']}</div>",
                 unsafe_allow_html=True)
         elif st.session_state.hst_chat[i]["role"] == "assistant":
-            # msg(st.session_state.selected_task + ": " + st.session_state.hst_chat[i]['content'])
             st.markdown(
                 f"<div style='text-align: left; color: black; background-color: rgba(206, 187, 163, 1.0);'>{st.session_state.selected_task}: {st.session_state.hst_chat[i]['content']}</div>",
                 unsafe_allow_html=True)
 
         # Translation expander for user input
-    if i % 2 == 0:
-        translation_expander = st.expander("Show User Translation", expanded=False)
-        with translation_expander:
-            # Use translator_to_en for user's messages
-            translation_result = translator_to_en.translate(st.session_state.hst_chat[i]['content'])
-            st.write(translation_result)
+        if i % 2 == 0:
+            translation_expander = st.expander("Show User Translation", expanded=False)
+            with translation_expander:
+                # Use translator_to_en for user's messages
+                translation_result = translator_to_en.translate(st.session_state.hst_chat[i]['content'])
+                st.write(translation_result)
 
         # Translation expander for assistant responses
-    else:
-        translation_expander = st.expander("Show Assistant Translation")
-        with translation_expander:
-            # Use translator_from_en for assistant's responses
-            translation_result = translator_from_en.translate(st.session_state.hst_chat[i]['content'])
-            st.write(translation_result)
+        else:
+            translation_expander = st.expander("Show Assistant Translation")
+            with translation_expander:
+                # Use translator_from_en for assistant's responses
+                translation_result = translator_from_en.translate(st.session_state.hst_chat[i]['content'])
+                st.write(translation_result)
 
 # If chat history exists, show the 'Save & Export' button
 btn_save = st.button("Save & Export")
