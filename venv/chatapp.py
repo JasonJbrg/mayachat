@@ -74,7 +74,7 @@ streamlit_style = """
      /* Hide the Streamlit menu */
     #MainMenu {
         visibility: hidden;
-    }
+    
 
     }
     @keyframes typewriter {
