@@ -162,7 +162,7 @@ def get_initial_context(task):
         return "Please select a task."
         
 # Prepare the conversation for the chat model
-if st.session_state.selected_task is not None:
+if 'selected_task' in st.session_state and st.session_state.selected_task is not None:
     conversation = [
         {"role": "assistant", "content": initial_context[st.session_state.selected_task]},
     ] + st.session_state.hst_chat
@@ -171,6 +171,7 @@ else:
     conversation = [
         {"role": "assistant", "content": "Please select a task."},
     ] + st.session_state.hst_chat
+
 
 # When 'Enter' button is clicked
 if btn_enter and user_prompt:
