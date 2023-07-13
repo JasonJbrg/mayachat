@@ -123,6 +123,12 @@ st.markdown(streamlit_style, unsafe_allow_html=True)
 # Add a default option to the task_selection list
 task_selection = ['Select...'] + task_selection
 
+# Initialize chat history in session state if not already present
+if 'hst_chat' not in st.session_state:
+    st.session_state.hst_chat = []
+if 'hst_chat_time' not in st.session_state:
+    st.session_state.hst_chat_time = []
+
 # Only proceed if a task is selected and the chat history is empty
 if selected_task != 'Select...' and not st.session_state.hst_chat:
     # Update the selected task in session state
@@ -138,11 +144,7 @@ if selected_task != 'Select...' and not st.session_state.hst_chat:
 # Update the selected task in session state
 st.session_state.selected_task = selected_task
 
-# Initialize chat history in session state if not already present
-if 'hst_chat' not in st.session_state:
-    st.session_state.hst_chat = []
-if 'hst_chat_time' not in st.session_state:
-    st.session_state.hst_chat_time = []
+
 
 # Get user input
 if selected_language != 'Select...':
