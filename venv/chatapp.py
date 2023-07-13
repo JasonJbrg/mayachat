@@ -11,9 +11,15 @@ import docx
 import io
 from docx import Document
 from datetime import datetime
+import random
+import language_tool_python
+
+
 
 # Load environment variables from .env file
 load_dotenv()
+
+
 
 # Read the config.json file
 with open("/Users/jasons/PycharmProjects/pythonProject/venv/config.json") as file:
@@ -25,6 +31,8 @@ initial_context = {
     task: f"{config['initial_context'][task]} Please provide brief and concise responses."
     for task in task_selection
 }
+greetings = config["greetings"]
+
 
 load_dotenv('/Users/jasons/PycharmProjects/pythonProject/PycharmProjects/.env')
   # take environment variables from .env.
@@ -74,17 +82,70 @@ streamlit_style = """
     }
     </style>
 """
+# Add a default option to the languages dictionary
+languages = {'Select...': ''}
+
+languages.update({
+    'Chinese': 'zh',
+    'Russian': 'ru',
+    'Arabic': 'ar',
+    'Japanese': 'ja',
+    'Farsi': 'fa',
+    'Spanish': 'es',
+    'German': 'de',
+    'Levantine Arabic': 'apc'  # ISO 639-3 code for Levantine Arabic
+})
+
+# Define default values for selected_language and selected_task
+selected_language = 'Select...'
+selected_task = 'Select...'
+
+# Get user input for language selection
+selected_language = st.selectbox("Select your language", list(languages.keys()), key='language_selection')
+
+if selected_language != 'Select...':
+    # Initialize the Translator with the selected language
+    translator = Translator(to_lang="en", from_lang=languages[selected_language])
+
+    # Add a default option to the task_selection list
+    task_selection = ['Select...'] + task_selection
+
+    # Get user input for task selection
+    selected_task = st.selectbox("Select a task", task_selection, key='task_selection')
+
+    # Only update the selected task in session state if a task is selected
+    if selected_task != 'Select...':
+        st.session_state.selected_task = selected_task
+else:
+    st.write("Please select a language first.")
+
+
+# Initialize two Translator objects with appropriate language settings
+translator_to_en = Translator(from_lang=languages[selected_language], to_lang="en")
+translator_from_en = Translator(from_lang="en", to_lang=languages[selected_language])
+
 # Apply styles
 st.markdown(streamlit_style, unsafe_allow_html=True)
 
-# Initialize the Translator
-translator = Translator(to_lang="en", from_lang="ar")
+# Add a default option to the task_selection list
+task_selection = ['Select...'] + task_selection
 
-# Get user input for task selection
-selected_task = st.selectbox("Select a task", task_selection)
+# Only proceed if a task is selected
+if selected_task != 'Select...' and 'greeting_sent' not in st.session_state:
+    # Update the selected task in session state
+    st.session_state.selected_task = selected_task
+    # Choose a random greeting for the selected task
+    greeting = random.choice(greetings[selected_task])
+    # Translate the greeting to the target language using translator_from_en
+    greeting_translated = translator_from_en.translate(greeting)
+    st.session_state.hst_chat.append({"role": "assistant", "content": greeting_translated})
+    st.session_state.hst_chat_time.append(datetime.now())
+    st.session_state.greeting_sent = True  # Add a flag to session state indicating that the greeting has been sent
 
 # Update the selected task in session state
 st.session_state.selected_task = selected_task
+
+
 
 # Initialize chat history in session state if not already present
 if 'hst_chat' not in st.session_state:
@@ -93,17 +154,36 @@ if 'hst_chat_time' not in st.session_state:
     st.session_state.hst_chat_time = []
 
 # Get user input
-user_prompt = st.text_input("Start your chat (in Arabic):")
+if selected_language != 'Select...':
+    user_prompt = st.text_input(f"Start your chat (in {selected_language}):")
+else:
+    user_prompt = ''
 btn_enter = st.button("Enter")
+
 
 # When 'Enter' button is clicked
 if btn_enter and user_prompt:
     # Get the current timestamp
     current_time = datetime.now()
 
-    # Add user's message and timestamp to chat history
+    # Add user's response to the chat history
     st.session_state.hst_chat.append({"role": "user", "content": user_prompt})
-    st.session_state.hst_chat_time.append(current_time)
+    st.session_state.hst_chat_time.append(datetime.now())
+
+    # Only generate a response if the last message was from the user
+    if st.session_state.hst_chat[-2]["role"] == "user":
+        # Use OpenAI API to get a response from the chat model
+        return_openai = openai.ChatCompletion.create(
+            model="gpt-3.5-turbo",
+            messages=conversation,
+            max_tokens=MAX_TOKENS,
+            n=1
+        )
+
+        # Add assistant's response to the chat history
+        assistant_response = return_openai['choices'][0]['message']['content']
+        st.session_state.hst_chat.append({"role": "assistant", "content": assistant_response})
+        st.session_state.hst_chat_time.append(datetime.now())
 
     # Load specific words from tcv.txt file
     # with open("venv/tcv.txt", "r", encoding="utf-8") as file:
@@ -170,6 +250,7 @@ if btn_enter and user_prompt:
         if current_message["content"]:
             split_conversation.append(current_message)
 
+
         # Use OpenAI API to get a response from the chat model
         responses = []
         for split_message in split_conversation:
@@ -208,52 +289,32 @@ if btn_enter and user_prompt:
 # Display chat history
 if st.session_state.hst_chat:
     for i in range(len(st.session_state.hst_chat)):
-        if i % 2 == 0:
+        if st.session_state.hst_chat[i]["role"] == "user":
             # msg("You: " + st.session_state.hst_chat[i]['content'], is_user=True)
             st.markdown(
                 f"<div style='text-align: left; color: black; background-color: rgba(206, 187, 163, 0.5); '>You: {st.session_state.hst_chat[i]['content']}</div>",
                 unsafe_allow_html=True)
-        else:
+        elif st.session_state.hst_chat[i]["role"] == "assistant":
             # msg(st.session_state.selected_task + ": " + st.session_state.hst_chat[i]['content'])
             st.markdown(
                 f"<div style='text-align: left; color: black; background-color: rgba(206, 187, 163, 1.0);'>{st.session_state.selected_task}: {st.session_state.hst_chat[i]['content']}</div>",
                 unsafe_allow_html=True)
 
-        # Translation button for user input
-        if i % 2 == 0:
-            translation_expander = st.expander("Show User Translation", expanded=False)
-            # Apply inline styles
-            translation_expander.markdown(
-                """
-                <span style="font-size: 8px; font-family: 'IBM Plex Mono Thin', monospace;"></span>
-                """,
-                unsafe_allow_html=True
-            )
+        # Translation expander for user input
+    if i % 2 == 0:
+        translation_expander = st.expander("Show User Translation", expanded=False)
+        with translation_expander:
+            # Use translator_to_en for user's messages
+            translation_result = translator_to_en.translate(st.session_state.hst_chat[i]['content'])
+            st.write(translation_result)
 
-            with translation_expander:
-                translation_result = translator.translate(st.session_state.hst_chat[i]['content'])
-                if isinstance(translation_result, str):
-                    translation = translation_result
-                else:
-                    translation = translation_result.text
-                st.write(translation)
-        # Translation button for assistant responses
-        else:
-            translation_expander = st.expander("Show Assistant Translation")
-            # Apply inline styles
-            translation_expander.markdown(
-                """
-                <span style="font-size: 8px; font-family: 'IBM Plex Mono Thin', monospace;"></span>
-                """,
-                unsafe_allow_html=True
-            )
-            with translation_expander:
-                translation_result = translator.translate(st.session_state.hst_chat[i]['content'])
-                if isinstance(translation_result, str):
-                    translation = translation_result
-                else:
-                    translation = translation_result.text
-                st.write(translation)
+        # Translation expander for assistant responses
+    else:
+        translation_expander = st.expander("Show Assistant Translation")
+        with translation_expander:
+            # Use translator_from_en for assistant's responses
+            translation_result = translator_from_en.translate(st.session_state.hst_chat[i]['content'])
+            st.write(translation_result)
 
 # If chat history exists, show the 'Save & Export' button
 btn_save = st.button("Save & Export")
