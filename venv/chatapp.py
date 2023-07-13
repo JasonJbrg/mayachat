@@ -154,6 +154,13 @@ btn_enter = st.button("Enter")
 MAX_TOKENS = 500
 MAX_TOKENS_PER_MESSAGE = 50
 
+# Define a function to get the initial context
+def get_initial_context(task):
+    if task in initial_context:
+        return initial_context[task]
+    else:
+        return "Please select a task."
+        
 # Prepare the conversation for the chat model
 if 'selected_task' in st.session_state and st.session_state.selected_task is not None:
     conversation = [
