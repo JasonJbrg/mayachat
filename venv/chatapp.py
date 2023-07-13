@@ -12,16 +12,17 @@ import io
 from docx import Document
 from datetime import datetime
 import random
+import language_tool_python
 
 
 
 # Load environment variables from .env file
-dotenv_path = "PycharmProjects/.env"
-load_dotenv(dotenv_path)
+load_dotenv()
+
 
 
 # Read the config.json file
-with open("venv/config.json") as file:
+with open("/Users/jasons/PycharmProjects/pythonProject/venv/config.json") as file:
     config = json.load(file)
 
 # Extract the values from the config dictionary
@@ -36,9 +37,8 @@ greetings = config["greetings"]
 load_dotenv('/Users/jasons/PycharmProjects/pythonProject/PycharmProjects/.env')
   # take environment variables from .env.
 
-# Set OpenAI API key
-openai.api_key = os.getenv("OPENAI_API_KEY")
-
+openai.api_key = os.getenv('OPENAI_API_KEY')
+api_key = os.getenv('OPENAI_API_KEY')
 
 # Set page configuration
 st.set_page_config(
@@ -115,9 +115,9 @@ if selected_language != 'Select...':
 
     # Only update the selected task in session state if a task is selected
     if selected_task != 'Select...':
-        if 'selected_task' in st.session_state and st.session_state.selected_task is not None: = selected_task
+        st.session_state.selected_task = selected_task
 else:
-    if 'selected_task' in st.session_state and st.session_state.selected_task is not None: = None  # Set to None or some default value
+    st.write("Please select a language first.")
 
 
 # Initialize two Translator objects with appropriate language settings
@@ -133,7 +133,7 @@ task_selection = ['Select...'] + task_selection
 # Only proceed if a task is selected
 if selected_task != 'Select...' and 'greeting_sent' not in st.session_state:
     # Update the selected task in session state
-    if 'selected_task' in st.session_state and st.session_state.selected_task is not None: = selected_task
+    st.session_state.selected_task = selected_task
     # Choose a random greeting for the selected task
     greeting = random.choice(greetings[selected_task])
     # Translate the greeting to the target language using translator_from_en
@@ -143,7 +143,7 @@ if selected_task != 'Select...' and 'greeting_sent' not in st.session_state:
     st.session_state.greeting_sent = True  # Add a flag to session state indicating that the greeting has been sent
 
 # Update the selected task in session state
-if 'selected_task' in st.session_state and st.session_state.selected_task is not None: = selected_task
+st.session_state.selected_task = selected_task
 
 
 
@@ -160,20 +160,7 @@ else:
     user_prompt = ''
 btn_enter = st.button("Enter")
 
-MAX_TOKENS = 500
-MAX_TOKENS_PER_MESSAGE = 50
 
-# Prepare the conversation for the chat model
-if if 'selected_task' in st.session_state and st.session_state.selected_task is not None: is not None:
-    conversation = [
-        {"role": "assistant", "content": initial_context[if 'selected_task' in st.session_state and st.session_state.selected_task is not None:]},
-    ] + st.session_state.hst_chat
-else:
-    # Handle case where if 'selected_task' in st.session_state and st.session_state.selected_task is not None: is None
-    conversation = [
-        {"role": "assistant", "content": "Please select a task."},
-    ] + st.session_state.hst_chat
-    
 # When 'Enter' button is clicked
 if btn_enter and user_prompt:
     # Get the current timestamp
@@ -216,7 +203,12 @@ if btn_enter and user_prompt:
     # ...
     # ...
 
-
+    MAX_TOKENS = 500
+    MAX_TOKENS_PER_MESSAGE = 50
+    # Prepare the conversation for the chat model
+    conversation = [
+                       {"role": "assistant", "content": initial_context[st.session_state.selected_task]},
+                   ] + st.session_state.hst_chat
 
     # Calculate the total number of tokens in the conversation
     total_tokens = sum(len(message['content'].split()) for message in conversation)
@@ -303,9 +295,9 @@ if st.session_state.hst_chat:
                 f"<div style='text-align: left; color: black; background-color: rgba(206, 187, 163, 0.5); '>You: {st.session_state.hst_chat[i]['content']}</div>",
                 unsafe_allow_html=True)
         elif st.session_state.hst_chat[i]["role"] == "assistant":
-            # msg(if 'selected_task' in st.session_state and st.session_state.selected_task is not None: + ": " + st.session_state.hst_chat[i]['content'])
+            # msg(st.session_state.selected_task + ": " + st.session_state.hst_chat[i]['content'])
             st.markdown(
-                f"<div style='text-align: left; color: black; background-color: rgba(206, 187, 163, 1.0);'>{if 'selected_task' in st.session_state and st.session_state.selected_task is not None:}: {st.session_state.hst_chat[i]['content']}</div>",
+                f"<div style='text-align: left; color: black; background-color: rgba(206, 187, 163, 1.0);'>{st.session_state.selected_task}: {st.session_state.hst_chat[i]['content']}</div>",
                 unsafe_allow_html=True)
 
         # Translation expander for user input
