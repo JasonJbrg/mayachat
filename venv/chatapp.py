@@ -185,8 +185,8 @@ if btn_enter and user_prompt:
     # Translate user's input to English
     user_prompt_translated = translator_to_en.translate(user_prompt)
 
-    # Add user's response to the chat history
-    st.session_state.hst_chat.append({"role": "user", "content": user_prompt})
+    # Add user's translated response to the chat history
+    st.session_state.hst_chat.append({"role": "user", "content": user_prompt_translated})
     st.session_state.hst_chat_time.append(datetime.now())
 
     # Only generate a response if the last message was from the user
