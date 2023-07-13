@@ -115,9 +115,9 @@ if selected_language != 'Select...':
 
     # Only update the selected task in session state if a task is selected
     if selected_task != 'Select...':
-        st.session_state.selected_task = selected_task
+        if 'selected_task' in st.session_state and st.session_state.selected_task is not None: = selected_task
 else:
-    st.session_state.selected_task = None  # Set to None or some default value
+    if 'selected_task' in st.session_state and st.session_state.selected_task is not None: = None  # Set to None or some default value
 
 
 # Initialize two Translator objects with appropriate language settings
@@ -133,7 +133,7 @@ task_selection = ['Select...'] + task_selection
 # Only proceed if a task is selected
 if selected_task != 'Select...' and 'greeting_sent' not in st.session_state:
     # Update the selected task in session state
-    st.session_state.selected_task = selected_task
+    if 'selected_task' in st.session_state and st.session_state.selected_task is not None: = selected_task
     # Choose a random greeting for the selected task
     greeting = random.choice(greetings[selected_task])
     # Translate the greeting to the target language using translator_from_en
@@ -143,7 +143,7 @@ if selected_task != 'Select...' and 'greeting_sent' not in st.session_state:
     st.session_state.greeting_sent = True  # Add a flag to session state indicating that the greeting has been sent
 
 # Update the selected task in session state
-st.session_state.selected_task = selected_task
+if 'selected_task' in st.session_state and st.session_state.selected_task is not None: = selected_task
 
 
 
@@ -164,12 +164,12 @@ MAX_TOKENS = 500
 MAX_TOKENS_PER_MESSAGE = 50
 
 # Prepare the conversation for the chat model
-if st.session_state.selected_task is not None:
+if if 'selected_task' in st.session_state and st.session_state.selected_task is not None: is not None:
     conversation = [
-        {"role": "assistant", "content": initial_context[st.session_state.selected_task]},
+        {"role": "assistant", "content": initial_context[if 'selected_task' in st.session_state and st.session_state.selected_task is not None:]},
     ] + st.session_state.hst_chat
 else:
-    # Handle case where st.session_state.selected_task is None
+    # Handle case where if 'selected_task' in st.session_state and st.session_state.selected_task is not None: is None
     conversation = [
         {"role": "assistant", "content": "Please select a task."},
     ] + st.session_state.hst_chat
@@ -303,9 +303,9 @@ if st.session_state.hst_chat:
                 f"<div style='text-align: left; color: black; background-color: rgba(206, 187, 163, 0.5); '>You: {st.session_state.hst_chat[i]['content']}</div>",
                 unsafe_allow_html=True)
         elif st.session_state.hst_chat[i]["role"] == "assistant":
-            # msg(st.session_state.selected_task + ": " + st.session_state.hst_chat[i]['content'])
+            # msg(if 'selected_task' in st.session_state and st.session_state.selected_task is not None: + ": " + st.session_state.hst_chat[i]['content'])
             st.markdown(
-                f"<div style='text-align: left; color: black; background-color: rgba(206, 187, 163, 1.0);'>{st.session_state.selected_task}: {st.session_state.hst_chat[i]['content']}</div>",
+                f"<div style='text-align: left; color: black; background-color: rgba(206, 187, 163, 1.0);'>{if 'selected_task' in st.session_state and st.session_state.selected_task is not None:}: {st.session_state.hst_chat[i]['content']}</div>",
                 unsafe_allow_html=True)
 
         # Translation expander for user input
