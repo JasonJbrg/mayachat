@@ -1,6 +1,5 @@
 import openai
 import streamlit as st
-import googletrans
 from streamlit_chat import message as msg
 from translate import Translator
 from pydub import AudioSegment
@@ -13,13 +12,11 @@ import io
 from docx import Document
 from datetime import datetime
 
-
 # Load environment variables from .env file
-load_dotenv("/Users/jasons/PycharmProjects/pythonProject/PycharmProjects/.env")
-
+load_dotenv()
 
 # Read the config.json file
-with open("config.json") as file:
+with open("/Users/jasons/PycharmProjects/pythonProject/venv/config.json") as file:
     config = json.load(file)
 
 # Extract the values from the config dictionary
@@ -29,26 +26,28 @@ initial_context = {
     for task in task_selection
 }
 
-load_dotenv()  # take environment variables from .env.
+load_dotenv('/Users/jasons/PycharmProjects/pythonProject/PycharmProjects/.env')
+  # take environment variables from .env.
+
 openai.api_key = os.getenv('OPENAI_API_KEY')
+api_key = os.getenv('OPENAI_API_KEY')
 
 # Set page configuration
 st.set_page_config(
     page_title="Maya Lingo",
-    page_icon="/Users/jasons/PycharmProjects/pythonProject/venv/static/jedburghlogo_webicon.png",
     layout="wide",
-    initial_sidebar_state="expanded"
+    initial_sidebar_state="collapsed"
 )
 
-# Apply styles
-
+# Define the CSS styles
 streamlit_style = """
     <style>
     @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono&display=swap');
 
-    html, body, [class*="css"] {
-        font-family: 'IBM Plex Mono', monospace;
-        background: #4F5223;
+    #root {
+        font-family: 'IBM Plex Mono', monospace !important;
+        background-color: #4F5223 !important;
+        color: white !important;
     }
     .custom-title {
         overflow: hidden;
@@ -57,6 +56,13 @@ streamlit_style = """
         animation: typewriter 4s steps(50) 1s both;
         white-space: nowrap;
         padding-bottom: 50px;
+
+    }
+         /* Hide the Streamlit footer */
+    .reportview-container .main footer {
+        visibility: hidden;
+    }
+
     }
     @keyframes typewriter {
         0% {
@@ -68,34 +74,19 @@ streamlit_style = """
     }
     </style>
 """
-
+# Apply styles
 st.markdown(streamlit_style, unsafe_allow_html=True)
-st.markdown('<h1 class="custom-title">WELCOME, AIRMAN ALLIE</h1>', unsafe_allow_html=True)
-
-# If 'custom_title' is not in st.session_state, assign a default title
-if 'custom_title' not in st.session_state:
-    st.session_state.custom_title = "WELCOME, AIRMAN ALLIE"
-app_name = st.session_state.custom_title
-
-# Create subheader
-st.markdown("""
-    <div style='border: 2px solid white; padding: 10px;'>
-        <h2 style='margin: 0; font-size: 14px; padding: 1em; font-family: 'IBM Plex Mono', monospace;'>Hamza, Cafe Owner</h2>
-    </div>
-""", unsafe_allow_html=True)
-
-
-
-
-# Set default task
-if 'selected_task' not in st.session_state:
-    st.session_state.selected_task = task_selection[0]
-st.session_state.selected_task = st.sidebar.radio("Select Task", task_selection)
 
 # Initialize the Translator
 translator = Translator(to_lang="en", from_lang="ar")
 
-# Initialize chat history in session state
+# Get user input for task selection
+selected_task = st.selectbox("Select a task", task_selection)
+
+# Update the selected task in session state
+st.session_state.selected_task = selected_task
+
+# Initialize chat history in session state if not already present
 if 'hst_chat' not in st.session_state:
     st.session_state.hst_chat = []
 if 'hst_chat_time' not in st.session_state:
@@ -106,7 +97,7 @@ user_prompt = st.text_input("Start your chat (in Arabic):")
 btn_enter = st.button("Enter")
 
 # When 'Enter' button is clicked
-if btn_enter:
+if btn_enter and user_prompt:
     # Get the current timestamp
     current_time = datetime.now()
 
@@ -115,24 +106,29 @@ if btn_enter:
     st.session_state.hst_chat_time.append(current_time)
 
     # Load specific words from tcv.txt file
-    with open("/Users/jasons/PycharmProjects/pythonProject/venv/tcv.txt", "r", encoding="utf-8") as file:
-        specific_words = [word.strip() for word in file.readlines()]
+    # with open("venv/tcv.txt", "r", encoding="utf-8") as file:
+    #    specific_words = [word.strip() for word in file.readlines()]
 
     # Check if user's input has any of the specific words
     # If yes, play ding sound
-    user_input_words = user_prompt.split()
-    matching_words = set(specific_words).intersection(user_input_words)
-    if matching_words:
-        ding_sound_path = "/Users/jasons/PycharmProjects/pythonProject/venv/audio/tcv_match.mp3"
-        ding_sound = AudioSegment.from_file(ding_sound_path)
-        play(ding_sound)
+    # user_input_words = user_prompt.split()
+    # matching_words = set(specific_words).intersection(user_input_words)
+    # if matching_words:
+    #   ding_sound_path = "venv/audio/tcv_match.mp3"
+    #  ding_sound = AudioSegment.from_file(ding_sound_path)
+    # play(ding_sound)
+
+    # ...
+    # ...
+    # ...
+    # ...
 
     MAX_TOKENS = 500
     MAX_TOKENS_PER_MESSAGE = 50
     # Prepare the conversation for the chat model
     conversation = [
-        {"role": "assistant", "content": initial_context[st.session_state.selected_task]},
-    ] + st.session_state.hst_chat
+                       {"role": "assistant", "content": initial_context[st.session_state.selected_task]},
+                   ] + st.session_state.hst_chat
 
     # Calculate the total number of tokens in the conversation
     total_tokens = sum(len(message['content'].split()) for message in conversation)
@@ -204,23 +200,36 @@ if btn_enter:
         st.session_state.hst_chat.append({"role": "assistant", "content": assistant_response})
         st.session_state.hst_chat_time.append(datetime.now())
 
-
-
+    # ...
+    # ...
+    # ...
+    # ...
 
 # Display chat history
 if st.session_state.hst_chat:
     for i in range(len(st.session_state.hst_chat)):
         if i % 2 == 0:
             # msg("You: " + st.session_state.hst_chat[i]['content'], is_user=True)
-            st.markdown(f"<div style='text-align: left; color: black; background-color: rgba(206, 187, 163, 0.5); '>You: {st.session_state.hst_chat[i]['content']}</div>", unsafe_allow_html=True)
+            st.markdown(
+                f"<div style='text-align: left; color: black; background-color: rgba(206, 187, 163, 0.5); '>You: {st.session_state.hst_chat[i]['content']}</div>",
+                unsafe_allow_html=True)
         else:
             # msg(st.session_state.selected_task + ": " + st.session_state.hst_chat[i]['content'])
-            st.markdown(f"<div style='text-align: left; color: black; background-color: rgba(206, 187, 163, 1.0);'>{st.session_state.selected_task}: {st.session_state.hst_chat[i]['content']}</div>", unsafe_allow_html=True)
+            st.markdown(
+                f"<div style='text-align: left; color: black; background-color: rgba(206, 187, 163, 1.0);'>{st.session_state.selected_task}: {st.session_state.hst_chat[i]['content']}</div>",
+                unsafe_allow_html=True)
 
-
-    # Translation button for user input
+        # Translation button for user input
         if i % 2 == 0:
-            translation_expander = st.expander("Show User Translation")
+            translation_expander = st.expander("Show User Translation", expanded=False)
+            # Apply inline styles
+            translation_expander.markdown(
+                """
+                <span style="font-size: 8px; font-family: 'IBM Plex Mono Thin', monospace;"></span>
+                """,
+                unsafe_allow_html=True
+            )
+
             with translation_expander:
                 translation_result = translator.translate(st.session_state.hst_chat[i]['content'])
                 if isinstance(translation_result, str):
@@ -231,6 +240,13 @@ if st.session_state.hst_chat:
         # Translation button for assistant responses
         else:
             translation_expander = st.expander("Show Assistant Translation")
+            # Apply inline styles
+            translation_expander.markdown(
+                """
+                <span style="font-size: 8px; font-family: 'IBM Plex Mono Thin', monospace;"></span>
+                """,
+                unsafe_allow_html=True
+            )
             with translation_expander:
                 translation_result = translator.translate(st.session_state.hst_chat[i]['content'])
                 if isinstance(translation_result, str):
@@ -239,49 +255,41 @@ if st.session_state.hst_chat:
                     translation = translation_result.text
                 st.write(translation)
 
-    # If chat history exists, show the 'Save & Export' button
-    btn_save = st.button("Save & Export")
-    if btn_save:
-        # Create a Word document with chat history
-        doc = Document()
+# If chat history exists, show the 'Save & Export' button
+btn_save = st.button("Save & Export")
+if btn_save:
+    # Create a Word document with chat history
+    doc = Document()
 
-        # Add the custom title with date and time to the document
-        custom_title = f"{st.session_state.custom_title} - {datetime.now().strftime('%m/%d/%Y %I:%M:%S %p')}"
-        doc.add_paragraph(custom_title)
-        doc.add_paragraph("")
+    # Add the current date and time to the document
+    doc.add_paragraph(datetime.now().strftime('%m/%d/%Y %I:%M:%S %p'))
 
-        # Calculate the total duration
-        total_duration = st.session_state.hst_chat_time[-1] - st.session_state.hst_chat_time[0]
+    # Calculate the total duration
+    total_duration = st.session_state.hst_chat_time[-1] - st.session_state.hst_chat_time[0]
 
-        # Add the total duration to the document
-        doc.add_paragraph(f"Total Duration: {total_duration}")
+    # Add the total duration to the document
+    doc.add_paragraph(f"Total Duration: {total_duration}")
 
-        # Add the custom title, task selection and initial context to the document
-        doc.add_paragraph(f"Custom Title: {st.session_state.custom_title}")
-        doc.add_paragraph(f"Task Selection: {st.session_state.selected_task}")
-        doc.add_paragraph(f"Initial Context: {initial_context[st.session_state.selected_task]}")
-        doc.add_paragraph("")
+    # Add the chat history to the document
+    for message in st.session_state.hst_chat:
+        doc.add_paragraph(f"{message['role']}: {message['content']}")
 
-        # Add the chat history to the document
-        for message in st.session_state.hst_chat:
-            doc.add_paragraph(f"{message['role']}: {message['content']}")
+    # Save the Document into memory
+    f = io.BytesIO()
+    doc.save(f)
 
-        # Save the Document into memory
-        f = io.BytesIO()
-        doc.save(f)
+    # Format current date and time
+    now = datetime.now()
+    date_time = now.strftime("%m%d%Y_%H%M%S")  # Changed format to remove slashes and colons
 
-        # Format current date and time
-        now = datetime.now()
-        date_time = now.strftime("%m/%d/%Y %I:%M:%S %p")
+    # Append date and time to the file name
+    f.name = "Chat_History_" + date_time + '.docx'  # Changed to a static string "Chat_History_"
+    f.seek(0)
 
-        # Append date and time to the file name
-        f.name = st.session_state.custom_title + "_" + date_time + '.docx'
-        f.seek(0)
-
-        # Download button for chat history Word document
-        st.download_button(
-            label="Download chat history",
-            data=f,
-            file_name=f.name,
-            mime='application/vnd.openxmlformats-officedocument.wordprocessingml.document'
-        )
+    # Download button for chat history Word document
+    st.download_button(
+        label="Download chat history",
+        data=f,
+        file_name=f.name,
+        mime='application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+    )

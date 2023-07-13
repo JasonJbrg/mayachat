@@ -1,2 +1,8 @@
 streamlit==1.24.0
 pyarrow==4.0.1
+streamlit-chat
+translate
+pydub
+openai
+python-dotenv
+python-docx==0.8.11
