@@ -164,22 +164,26 @@ def get_initial_context(task):
         return "Please select a task."
         
 # Prepare the conversation for the chat model
-if 'selected_task' in st.session_state and st.session_state.selected_task is not None and st.session_state.selected_task in initial_context:
-    conversation = [
-        {"role": "assistant", "content": initial_context[st.session_state.selected_task]},
-    ] + st.session_state.hst_chat
-else:
-    # Handle case where st.session_state.selected_task is None or does not exist in initial_context
-    conversation = [
-        {"role": "assistant", "content": "Please select a valid task."},
-    ] + st.session_state.hst_chat
+conversation = [
+    {"role": "assistant", "content": initial_context[st.session_state.selected_task]},
+] + st.session_state.hst_chat
+
+# Only generate a response if the last message was from the user
+if conversation[-1]["role"] == "user":
+    # Use OpenAI API to get a response from the chat model
+    return_openai = openai.ChatCompletion.create(
+        model="gpt-3.5-turbo",
+        messages=conversation,
+        max_tokens=MAX_TOKENS,
+        n=1
+    )
 
 
 
 # When 'Enter' button is clicked
 if btn_enter and user_prompt:
-    # Get the current timestamp
-    current_time = datetime.now()
+    # Translate user's input to English
+    user_prompt_translated = translator_to_en.translate(user_prompt)
 
     # Add user's response to the chat history
     st.session_state.hst_chat.append({"role": "user", "content": user_prompt})
@@ -200,7 +204,7 @@ if btn_enter and user_prompt:
         st.session_state.hst_chat.append({"role": "assistant", "content": assistant_response})
         st.session_state.hst_chat_time.append(datetime.now())
 
-    # ...
+    
 
     # Calculate the total number of tokens in the conversation
     total_tokens = sum(len(message['content'].split()) for message in conversation)
@@ -273,7 +277,7 @@ if btn_enter and user_prompt:
         st.session_state.hst_chat.append({"role": "assistant", "content": assistant_response})
         st.session_state.hst_chat_time.append(datetime.now())
 
-    # ...
+    
 
 # Display chat history
 if st.session_state.hst_chat:
