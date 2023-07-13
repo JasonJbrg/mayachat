@@ -164,9 +164,16 @@ def get_initial_context(task):
         return "Please select a task."
         
 # Prepare the conversation for the chat model
-conversation = [
-    {"role": "assistant", "content": initial_context[st.session_state.selected_task]},
-] + st.session_state.hst_chat
+if 'selected_task' in st.session_state and st.session_state.selected_task is not None and st.session_state.selected_task in initial_context:
+    conversation = [
+        {"role": "assistant", "content": initial_context[st.session_state.selected_task]},
+    ] + st.session_state.hst_chat
+else:
+    # Handle case where st.session_state.selected_task is None or does not exist in initial_context
+    conversation = [
+        {"role": "assistant", "content": "Please select a valid task."},
+    ] + st.session_state.hst_chat
+
 
 # Only generate a response if the last message was from the user
 if conversation[-1]["role"] == "user":
