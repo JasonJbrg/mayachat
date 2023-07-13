@@ -117,7 +117,7 @@ if selected_language != 'Select...':
     if selected_task != 'Select...':
         st.session_state.selected_task = selected_task
 else:
-    st.write("Please select a language first.")
+    st.session_state.selected_task = None  # Set to None or some default value
 
 
 # Initialize two Translator objects with appropriate language settings
@@ -162,11 +162,18 @@ btn_enter = st.button("Enter")
 
 MAX_TOKENS = 500
 MAX_TOKENS_PER_MESSAGE = 50
-# Prepare the conversation for the chat model
-conversation = [
-      {"role": "assistant", "content": initial_context[st.session_state.selected_task]},
-] + st.session_state.hst_chat
 
+# Prepare the conversation for the chat model
+if st.session_state.selected_task is not None:
+    conversation = [
+        {"role": "assistant", "content": initial_context[st.session_state.selected_task]},
+    ] + st.session_state.hst_chat
+else:
+    # Handle case where st.session_state.selected_task is None
+    conversation = [
+        {"role": "assistant", "content": "Please select a task."},
+    ] + st.session_state.hst_chat
+    
 # When 'Enter' button is clicked
 if btn_enter and user_prompt:
     # Get the current timestamp
