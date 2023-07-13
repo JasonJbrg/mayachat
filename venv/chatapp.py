@@ -132,7 +132,7 @@ translator_to_en = Translator(from_lang=languages[selected_language], to_lang="e
 translator_from_en = Translator(from_lang="en", to_lang=languages[selected_language])
 
 # Apply styles
-st.components.v1.html(streamlit_style, unsafe_allow_html=False)
+st.markdown(streamlit_style, unsafe_allow_html=True)
 
 # Add a default option to the task_selection list
 task_selection = ['Select...'] + task_selection
