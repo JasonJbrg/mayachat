@@ -18,10 +18,10 @@ import random
 # Load environment variables from .env file
 load_dotenv()
 
-
+venv/config.json
 
 # Read the config.json file
-with open("/Users/jasons/PycharmProjects/pythonProject/venv/config.json") as file:
+with open("venv/config.json") as file:
     config = json.load(file)
 
 # Extract the values from the config dictionary
