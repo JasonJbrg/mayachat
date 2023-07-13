@@ -71,6 +71,11 @@ streamlit_style = """
         visibility: hidden;
     }
 
+     /* Hide the Streamlit menu */
+    #MainMenu {
+        visibility: hidden;
+    }
+
     }
     @keyframes typewriter {
         0% {
