@@ -18,7 +18,6 @@ import random
 # Load environment variables from .env file
 load_dotenv()
 
-venv/config.json
 
 # Read the config.json file
 with open("venv/config.json") as file:
