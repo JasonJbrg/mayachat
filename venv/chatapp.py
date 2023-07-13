@@ -123,8 +123,8 @@ st.markdown(streamlit_style, unsafe_allow_html=True)
 # Add a default option to the task_selection list
 task_selection = ['Select...'] + task_selection
 
-# Only proceed if a task is selected
-if selected_task != 'Select...' and 'greeting_sent' not in st.session_state:
+# Only proceed if a task is selected and the chat history is empty
+if selected_task != 'Select...' and not st.session_state.hst_chat:
     # Update the selected task in session state
     st.session_state.selected_task = selected_task
     # Choose a random greeting for the selected task
@@ -133,7 +133,7 @@ if selected_task != 'Select...' and 'greeting_sent' not in st.session_state:
     greeting_translated = translator_from_en.translate(greeting)
     st.session_state.hst_chat.append({"role": "assistant", "content": greeting_translated})
     st.session_state.hst_chat_time.append(datetime.now())
-    st.session_state.greeting_sent = True  # Add a flag to session state indicating that the greeting has been sent
+
 
 # Update the selected task in session state
 st.session_state.selected_task = selected_task
