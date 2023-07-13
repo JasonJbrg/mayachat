@@ -12,16 +12,17 @@ import io
 from docx import Document
 from datetime import datetime
 import random
+import language_tool_python
 
 
 
 # Load environment variables from .env file
-dotenv_path = "PycharmProjects/.env"
-load_dotenv(dotenv_path)
+load_dotenv()
+
 
 
 # Read the config.json file
-with open("venv/config.json") as file:
+with open("/Users/jasons/PycharmProjects/pythonProject/venv/config.json") as file:
     config = json.load(file)
 
 # Extract the values from the config dictionary
@@ -36,9 +37,8 @@ greetings = config["greetings"]
 load_dotenv('/Users/jasons/PycharmProjects/pythonProject/PycharmProjects/.env')
   # take environment variables from .env.
 
-# Set OpenAI API key
-openai.api_key = os.getenv("OPENAI_API_KEY")
-
+openai.api_key = os.getenv('OPENAI_API_KEY')
+api_key = os.getenv('OPENAI_API_KEY')
 
 # Set page configuration
 st.set_page_config(
@@ -160,12 +160,6 @@ else:
     user_prompt = ''
 btn_enter = st.button("Enter")
 
-MAX_TOKENS = 500
-MAX_TOKENS_PER_MESSAGE = 50
-# Prepare the conversation for the chat model
-conversation = [
-      {"role": "assistant", "content": initial_context[st.session_state.selected_task]},
-] + st.session_state.hst_chat
 
 # When 'Enter' button is clicked
 if btn_enter and user_prompt:
@@ -209,7 +203,12 @@ if btn_enter and user_prompt:
     # ...
     # ...
 
-
+    MAX_TOKENS = 500
+    MAX_TOKENS_PER_MESSAGE = 50
+    # Prepare the conversation for the chat model
+    conversation = [
+                       {"role": "assistant", "content": initial_context[st.session_state.selected_task]},
+                   ] + st.session_state.hst_chat
 
     # Calculate the total number of tokens in the conversation
     total_tokens = sum(len(message['content'].split()) for message in conversation)
