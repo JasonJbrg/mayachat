@@ -35,8 +35,8 @@ greetings = config["greetings"]
 load_dotenv('/Users/jasons/PycharmProjects/pythonProject/PycharmProjects/.env')
   # take environment variables from .env.
 
-api_key = st.secrets["openai_api_key"]
-openai.api_key = api_key
+openai.api_key = os.getenv("OPENAI_API_KEY")
+
 
 # Set page configuration
 st.set_page_config(
