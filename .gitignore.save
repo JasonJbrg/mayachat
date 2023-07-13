@@ -1,0 +1,50 @@
+.env
+
+Last login: Wed Jul 12 22:40:56 on ttys002
+jasons@Jasons-M2 ~ % cd /Users/jasons/PycharmProjects/pythonProject
+
+jasons@Jasons-M2 pythonProject % nano .gitignore
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  UW PICO 5.09                    File: .gitignore                    Modified  
+
+# Ignore all files and directories
+*
+
+# Include the .env file
+!.env
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+^G Get Help  ^O WriteOut  ^R Read File ^Y Prev Pg   ^K Cut Text  ^C Cur Pos   
+^X Exit      ^J Justify   ^W Where is  ^V Next Pg   ^U UnCut Text^T To Spell  
