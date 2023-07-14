@@ -147,10 +147,10 @@ st.session_state.selected_task = selected_task
 user_input_placeholder = st.empty()
 # Get user input
 if selected_language != 'Select...':
-    user_prompt = st.text_input(f"Start your chat (in {selected_language}):")
+    user_prompt = user_input_placeholder.text_input(f"Start your chat (in {selected_language}):")
 else:
     user_prompt = ''
-btn_enter = st.button("Enter")
+btn_enter = user_input_placeholder.button("Enter")
 
 
 MAX_TOKENS = 500
