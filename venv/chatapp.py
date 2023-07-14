@@ -188,7 +188,7 @@ if conversation[-1]["role"] == "user":
 
 
 # When 'Enter' button is clicked
-if btn_enter and user_prompt:
+if st.session_state.btn_enter and st.session_state.user_prompt:
     # Translate user's input to English
     user_prompt_translated = translator_to_en.translate(user_prompt)
 
@@ -362,3 +362,8 @@ if selected_language != 'Select...':
 else:
     user_prompt = user_prompt_placeholder.text_input('')
 btn_enter = btn_enter_placeholder.button("Enter")
+
+# Save user_prompt and btn_enter in SessionState
+st.session_state.user_prompt = user_prompt
+st.session_state.btn_enter = btn_enter
+
