@@ -145,14 +145,6 @@ if selected_task != 'Select...' and not st.session_state.hst_chat:
 st.session_state.selected_task = selected_task
 
 
-
-# Get user input
-if selected_language != 'Select...':
-    user_prompt = st.text_input(f"Start your chat (in {selected_language}):")
-else:
-    user_prompt = ''
-btn_enter = st.button("Enter")
-
 MAX_TOKENS = 500
 MAX_TOKENS_PER_MESSAGE = 50
 
@@ -316,6 +308,13 @@ if st.session_state.hst_chat:
                 # Use translator_from_en for assistant's responses
                 translation_result = translator_from_en.translate(st.session_state.hst_chat[i]['content'])
                 st.write(translation_result)
+
+# Get user input
+if selected_language != 'Select...':
+    user_prompt = st.text_input(f"Start your chat (in {selected_language}):")
+else:
+    user_prompt = ''
+btn_enter = st.button("Enter")
 
 # If chat history exists, show the 'Save & Export' button
 btn_save = st.button("Save & Export")
