@@ -144,6 +144,7 @@ if selected_task != 'Select...' and not st.session_state.hst_chat:
 # Update the selected task in session state
 st.session_state.selected_task = selected_task
 
+user_input_placeholder = st.empty()
 
 MAX_TOKENS = 500
 MAX_TOKENS_PER_MESSAGE = 50
