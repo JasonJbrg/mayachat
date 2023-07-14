@@ -373,7 +373,7 @@ if st.session_state.btn_enter and st.session_state.user_prompt:
     # Your code here...
 
 
-# Save user_prompt and btn_enter in SessionState
-st.session_state.user_prompt = user_prompt
-st.session_state.btn_enter = btn_enter
+    # Save user_prompt and btn_enter in SessionState
+    st.session_state.user_prompt = user_prompt
+    st.session_state.btn_enter = btn_enter
 
