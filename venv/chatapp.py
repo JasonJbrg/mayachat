@@ -317,12 +317,7 @@ if st.session_state.hst_chat:
                 translation_result = translator_from_en.translate(st.session_state.hst_chat[i]['content'])
                 st.write(translation_result)
 
-# Get user input
-if selected_language != 'Select...':
-    user_prompt = user_input_placeholder.text_input(f"Start your chat (in {selected_language}):")
-else:
-    user_prompt = ''
-btn_enter = user_input_placeholder.button("Enter")
+
 
 
 # If chat history exists, show the 'Save & Export' button
