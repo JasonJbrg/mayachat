@@ -41,6 +41,14 @@ st.set_page_config(
     initial_sidebar_state="collapsed"
 )
 
+user_input_placeholder = st.empty()
+# Get user input
+if selected_language != 'Select...':
+    user_prompt = user_input_placeholder.text_input(f"Start your chat (in {selected_language}):", key='user_prompt')
+else:
+    user_prompt = ''
+btn_enter = user_input_placeholder.button("Enter", key='btn_enter')
+
 # Define the CSS styles
 streamlit_style = """
     <style>
@@ -144,13 +152,8 @@ if selected_task != 'Select...' and not st.session_state.hst_chat:
 # Update the selected task in session state
 st.session_state.selected_task = selected_task
 
-user_input_placeholder = st.empty()
-# Get user input
-if selected_language != 'Select...':
-    user_prompt = user_input_placeholder.text_input(f"Start your chat (in {selected_language}):", key='user_prompt')
-else:
-    user_prompt = ''
-btn_enter = user_input_placeholder.button("Enter", key='btn_enter')
+
+
 
 
 MAX_TOKENS = 500
