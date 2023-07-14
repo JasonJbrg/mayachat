@@ -13,7 +13,6 @@ from docx import Document
 from datetime import datetime
 import random
 
-ui_placeholder = st.empty()
 
 
 # Load environment variables from .env file
@@ -43,6 +42,7 @@ st.set_page_config(
     layout="wide",
     initial_sidebar_state="collapsed"
 )
+ui_placeholder = st.empty()
 
 # Initialize selected_language
 selected_language = 'Select...'
