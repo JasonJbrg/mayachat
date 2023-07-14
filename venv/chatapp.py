@@ -99,7 +99,7 @@ selected_language = st.selectbox("Select your language", list(languages.keys()),
 
 if selected_language != 'Select...':
     # Initialize the Translator with the selected language
-    translator = Translator(to_lang="en", from_lang=languages[selected_language], provider="mymemory", secret_access_key="jason@jedburghco.com")
+    translator = Translator(to_lang="en", from_lang=languages[selected_language])
 
     # Add a default option to the task_selection list
     task_selection = ['Select...'] + task_selection
@@ -114,9 +114,8 @@ else:
     st.session_state.selected_task = None  # Set to None or some default value
 
 # Initialize two Translator objects with appropriate language settings
-translator_to_en = Translator(from_lang=languages[selected_language], to_lang="en", provider="mymemory", secret_access_key="jason@jedburghco.com")
-translator_from_en = Translator(from_lang="en", to_lang=languages[selected_language], provider="mymemory", secret_access_key="jason@jedburghco.com")
-
+translator_to_en = Translator(from_lang=languages[selected_language], to_lang="en")
+translator_from_en = Translator(from_lang="en", to_lang=languages[selected_language])
 
 # Apply styles
 st.markdown(streamlit_style, unsafe_allow_html=True)
@@ -173,7 +172,7 @@ conversation = [
 
 
 # Only generate a response if the last message was from the user
-if conversation and conversation[-1]["role"] == "user":
+if conversation[-1]["role"] == "user":
     # Use OpenAI API to get a response from the chat model
     return_openai = openai.ChatCompletion.create(
         model="gpt-3.5-turbo",
