@@ -188,7 +188,7 @@ if conversation[-1]["role"] == "user":
 
 
 # When 'Enter' button is clicked
-if st.session_state.btn_enter and st.session_state.user_prompt:
+if st.session_state['btn_enter'] and st.session_state['user_prompt']:
     # Translate user's input to English
     user_prompt_translated = translator_to_en.translate(user_prompt)
 
