@@ -146,12 +146,7 @@ st.session_state.selected_task = selected_task
 
 
 
-# Get user input
-if selected_language != 'Select...':
-    user_prompt = st.text_input(f"Start your chat (in {selected_language}):")
-else:
-    user_prompt = ''
-btn_enter = st.button("Enter")
+
 
 MAX_TOKENS = 500
 MAX_TOKENS_PER_MESSAGE = 50
@@ -184,12 +179,6 @@ if conversation[-1]["role"] == "user":
         max_tokens=MAX_TOKENS,
         n=1
     )
-
-
-
-
-
-    
 
 # Display chat history
 if st.session_state.hst_chat:
@@ -257,6 +246,14 @@ if btn_save:
         file_name=f.name,
         mime='application/vnd.openxmlformats-officedocument.wordprocessingml.document'
     )
+
+# Get user input
+if selected_language != 'Select...':
+    user_prompt = st.text_input(f"Start your chat (in {selected_language}):")
+else:
+    user_prompt = ''
+btn_enter = st.button("Enter")
+
 
 # When 'Enter' button is clicked
 if btn_enter and user_prompt:
