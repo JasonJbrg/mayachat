@@ -44,13 +44,7 @@ st.set_page_config(
 # Initialize selected_language
 selected_language = 'Select...'
 
-user_input_placeholder = st.empty()
-# Get user input
-if selected_language != 'Select...':
-    user_prompt = user_input_placeholder.text_input(f"Start your chat (in {selected_language}):", key='user_prompt')
-else:
-    user_prompt = ''
-btn_enter = user_input_placeholder.button("Enter", key='btn_enter')
+
 
 # Define the CSS styles
 streamlit_style = """
@@ -363,3 +357,10 @@ if btn_save:
         file_name=f.name,
         mime='application/vnd.openxmlformats-officedocument.wordprocessingml.document'
     )
+user_input_placeholder = st.empty()
+# Get user input
+if selected_language != 'Select...':
+    user_prompt = user_input_placeholder.text_input(f"Start your chat (in {selected_language}):", key='user_prompt')
+else:
+    user_prompt = ''
+btn_enter = user_input_placeholder.button("Enter", key='btn_enter')
