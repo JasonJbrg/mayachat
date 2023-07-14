@@ -356,13 +356,7 @@ if btn_save:
         mime='application/vnd.openxmlformats-officedocument.wordprocessingml.document'
     )
 
-# At the very end of your script, populate the placeholders with the respective components
-if selected_language != 'Select...':
-    user_prompt = user_prompt_placeholder.text_input(f"Start your chat (in {selected_language}):")
-else:
-    user_prompt = user_prompt_placeholder.text_input('')
-btn_enter = btn_enter_placeholder.button("Enter")
-
+# Initialize session state variables
 if 'btn_enter' not in st.session_state:
     st.session_state['btn_enter'] = False  # or some other default value
 
@@ -370,10 +364,17 @@ if 'user_prompt' not in st.session_state:
     st.session_state['user_prompt'] = ""  # or some other default value
 
 if st.session_state.btn_enter and st.session_state.user_prompt:
-    # Your code here...
+
+# At the very end of your script, populate the placeholders with the respective components
+if selected_language != 'Select...':
+    user_prompt = user_prompt_placeholder.text_input(f"Start your chat (in {selected_language}):")
+else:
+    user_prompt = user_prompt_placeholder.text_input('')
+btn_enter = btn_enter_placeholder.button("Enter")
 
 
-    # Save user_prompt and btn_enter in SessionState
-    st.session_state.user_prompt = user_prompt
-    st.session_state.btn_enter = btn_enter
+
+
+
+   
 
