@@ -173,7 +173,7 @@ conversation = [
 
 
 # Only generate a response if the last message was from the user
-if conversation[-1]["role"] == "user":
+if conversation and conversation[-1]["role"] == "user":
     # Use OpenAI API to get a response from the chat model
     return_openai = openai.ChatCompletion.create(
         model="gpt-3.5-turbo",
