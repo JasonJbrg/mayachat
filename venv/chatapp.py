@@ -94,6 +94,16 @@ languages.update({
 selected_language = 'Select...'
 selected_task = 'Select...'
 
+# Create containers
+container1 = st.container()
+container2 = st.container()
+container3 = st.container()
+container4 = st.container()
+
+with container1:
+    pass  # Container 1 is empty
+
+with container2:
 # Get user input for language selection
 selected_language = st.selectbox("Select your language", list(languages.keys()), key='language_selection')
 
@@ -129,6 +139,7 @@ if 'hst_chat' not in st.session_state:
 if 'hst_chat_time' not in st.session_state:
     st.session_state.hst_chat_time = []
 
+with container3:
 # Only proceed if a task is selected and the chat history is empty
 if selected_task != 'Select...' and not st.session_state.hst_chat:
     # Update the selected task in session state
@@ -246,7 +257,8 @@ if btn_save:
         file_name=f.name,
         mime='application/vnd.openxmlformats-officedocument.wordprocessingml.document'
     )
-
+    
+with container4:
 # Get user input
 if selected_language != 'Select...':
     user_prompt = st.text_input(f"Start your chat (in {selected_language}):")
