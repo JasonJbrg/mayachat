@@ -13,6 +13,9 @@ from docx import Document
 from datetime import datetime
 import random
 
+ui_placeholder = st.empty()
+
+
 # Load environment variables from .env file
 dotenv_path = "PycharmProjects/.env"
 load_dotenv(dotenv_path)
@@ -364,3 +367,7 @@ if selected_language != 'Select...':
 else:
     user_prompt = ''
 btn_enter = user_input_placeholder.button("Enter", key='btn_enter')
+
+user_prompt = ui_placeholder.text_input("Please enter your input", key='user_input')
+btn_enter = ui_placeholder.button('Enter')
+
