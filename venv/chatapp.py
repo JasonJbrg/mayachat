@@ -97,9 +97,10 @@ selected_task = 'Select...'
 # Create containers
 def main ():
     container1 = st.container()
+    container4 = st.container(align_bottom = True)
     container2 = st.container()
     container3 = st.container()
-    container4 = st.container(align_bottom = True)
+    
 
 with container1:
     pass  # Container 1 is empty
