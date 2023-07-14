@@ -166,6 +166,10 @@ def get_initial_context(task):
     else:
         return "Please select a task."
         
+# Print the value of st.session_state.selected_task and the keys of initial_context
+st.write(f"Selected task: {st.session_state.selected_task}")
+st.write(f"Initial context keys: {initial_context.keys()}")
+
 # Prepare the conversation for the chat model
 if st.session_state.selected_task is not None:
     conversation = [
