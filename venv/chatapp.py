@@ -107,8 +107,8 @@ with container1:
     pass  # Container 1 is empty
 
 with container2:
-# Get user input for language selection
-selected_language = st.selectbox("Select your language", list(languages.keys()), key='language_selection')
+    # Get user input for language selection
+    selected_language = st.selectbox("Select your language", list(languages.keys()), key='language_selection')
 
 if selected_language != 'Select...':
     # Initialize the Translator with the selected language
