@@ -356,14 +356,13 @@ if btn_save:
         mime='application/vnd.openxmlformats-officedocument.wordprocessingml.document'
     )
 
-# Initialize session state variables
-if 'btn_enter' not in st.session_state:
-    st.session_state['btn_enter'] = False  # or some other default value
-
-if 'user_prompt' not in st.session_state:
-    st.session_state['user_prompt'] = ""  # or some other default value
-
-if st.session_state.btn_enter and st.session_state.user_prompt:
+# Define your Streamlit app
+def app():
+    # Initialize session state variables if they're not already set
+    if 'btn_enter' not in st.session_state:
+        st.session_state['btn_enter'] = False  # or any default value
+    if 'user_prompt' not in st.session_state:
+        st.session_state['user_prompt'] = ""  # or any default value
 
 # At the very end of your script, populate the placeholders with the respective components
 if selected_language != 'Select...':
