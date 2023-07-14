@@ -151,20 +151,7 @@ btn_enter_placeholder = st.empty()
 
 
 
-# At the very end of your script, populate the placeholders with the respective components
-if selected_language != 'Select...':
-    user_prompt = user_prompt_placeholder.text_input(f"Start your chat (in {selected_language}):")
-else:
-    user_prompt = user_prompt_placeholder.text_input('')
-btn_enter = btn_enter_placeholder.button("Enter")
 
-
-# Get user input
-if selected_language != 'Select...':
-    user_prompt = st.text_input(f"Start your chat (in {selected_language}):")
-else:
-    user_prompt = ''
-btn_enter = st.button("Enter")
 
 MAX_TOKENS = 500
 MAX_TOKENS_PER_MESSAGE = 50
