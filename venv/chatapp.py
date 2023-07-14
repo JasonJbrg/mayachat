@@ -13,9 +13,12 @@ from docx import Document
 from datetime import datetime
 import random
 
+
+
 # Load environment variables from .env file
 dotenv_path = "PycharmProjects/.env"
 load_dotenv(dotenv_path)
+
 
 # Read the config.json file
 with open("venv/config.json") as file:
@@ -29,10 +32,13 @@ initial_context = {
 }
 greetings = config["greetings"]
 
+
 load_dotenv('/Users/jasons/PycharmProjects/pythonProject/PycharmProjects/.env')
+  # take environment variables from .env.
 
 # Set OpenAI API key
 openai.api_key = os.getenv("OPENAI_API_KEY")
+
 
 # Set page configuration
 st.set_page_config(
@@ -111,7 +117,8 @@ if selected_language != 'Select...':
     if selected_task != 'Select...':
         st.session_state.selected_task = selected_task
 else:
-    st.session_state.selected_task = None  # Set to None or some default value
+    st.write("Please select a language first.")
+
 
 # Initialize two Translator objects with appropriate language settings
 translator_to_en = Translator(from_lang=languages[selected_language], to_lang="en")
@@ -123,14 +130,8 @@ st.markdown(streamlit_style, unsafe_allow_html=True)
 # Add a default option to the task_selection list
 task_selection = ['Select...'] + task_selection
 
-# Initialize chat history in session state if not already present
-if 'hst_chat' not in st.session_state:
-    st.session_state.hst_chat = []
-if 'hst_chat_time' not in st.session_state:
-    st.session_state.hst_chat_time = []
-
-# Only proceed if a task is selected and the chat history is empty
-if selected_task != 'Select...' and not st.session_state.hst_chat:
+# Only proceed if a task is selected
+if selected_task != 'Select...' and 'greeting_sent' not in st.session_state:
     # Update the selected task in session state
     st.session_state.selected_task = selected_task
     # Choose a random greeting for the selected task
@@ -139,12 +140,18 @@ if selected_task != 'Select...' and not st.session_state.hst_chat:
     greeting_translated = translator_from_en.translate(greeting)
     st.session_state.hst_chat.append({"role": "assistant", "content": greeting_translated})
     st.session_state.hst_chat_time.append(datetime.now())
-
+    st.session_state.greeting_sent = True  # Add a flag to session state indicating that the greeting has been sent
 
 # Update the selected task in session state
 st.session_state.selected_task = selected_task
 
 
+
+# Initialize chat history in session state if not already present
+if 'hst_chat' not in st.session_state:
+    st.session_state.hst_chat = []
+if 'hst_chat_time' not in st.session_state:
+    st.session_state.hst_chat_time = []
 
 # Get user input
 if selected_language != 'Select...':
@@ -155,45 +162,19 @@ btn_enter = st.button("Enter")
 
 MAX_TOKENS = 500
 MAX_TOKENS_PER_MESSAGE = 50
-
-# Define a function to get the initial context
-def get_initial_context(task):
-    if task is not None and task in initial_context:
-        return initial_context[task]
-    else:
-        return "Please select a task."
-        
 # Prepare the conversation for the chat model
 conversation = [
-    {"role": "assistant", "content": initial_context[st.session_state.selected_task]},
-    {"role": "user", "content": user_prompt},  # use original prompt
+      {"role": "assistant", "content": initial_context[st.session_state.selected_task]},
 ] + st.session_state.hst_chat
-
-
-
-# Only generate a response if the last message was from the user
-if conversation[-1]["role"] == "user":
-    # Use OpenAI API to get a response from the chat model
-    return_openai = openai.ChatCompletion.create(
-        model="gpt-3.5-turbo",
-        messages=conversation,
-        max_tokens=MAX_TOKENS,
-        n=1
-    )
-
-
 
 # When 'Enter' button is clicked
 if btn_enter and user_prompt:
-    # Translate user's input to English
-    user_prompt_translated = translator_to_en.translate(user_prompt)
+    # Get the current timestamp
+    current_time = datetime.now()
 
-    # Add user's translated response to the chat history
+    # Add user's response to the chat history
     st.session_state.hst_chat.append({"role": "user", "content": user_prompt})
     st.session_state.hst_chat_time.append(datetime.now())
-
-    # Add user's translated response to the conversation
-    conversation.append({"role": "user", "content": user_prompt_translated})
 
     # Only generate a response if the last message was from the user
     if st.session_state.hst_chat[-2]["role"] == "user":
@@ -210,7 +191,25 @@ if btn_enter and user_prompt:
         st.session_state.hst_chat.append({"role": "assistant", "content": assistant_response})
         st.session_state.hst_chat_time.append(datetime.now())
 
-    
+    # Load specific words from tcv.txt file
+    # with open("venv/tcv.txt", "r", encoding="utf-8") as file:
+    #    specific_words = [word.strip() for word in file.readlines()]
+
+    # Check if user's input has any of the specific words
+    # If yes, play ding sound
+    # user_input_words = user_prompt.split()
+    # matching_words = set(specific_words).intersection(user_input_words)
+    # if matching_words:
+    #   ding_sound_path = "venv/audio/tcv_match.mp3"
+    #  ding_sound = AudioSegment.from_file(ding_sound_path)
+    # play(ding_sound)
+
+    # ...
+    # ...
+    # ...
+    # ...
+
+
 
     # Calculate the total number of tokens in the conversation
     total_tokens = sum(len(message['content'].split()) for message in conversation)
@@ -283,35 +282,40 @@ if btn_enter and user_prompt:
         st.session_state.hst_chat.append({"role": "assistant", "content": assistant_response})
         st.session_state.hst_chat_time.append(datetime.now())
 
-    
+    # ...
+    # ...
+    # ...
+    # ...
 
 # Display chat history
 if st.session_state.hst_chat:
     for i in range(len(st.session_state.hst_chat)):
         if st.session_state.hst_chat[i]["role"] == "user":
+            # msg("You: " + st.session_state.hst_chat[i]['content'], is_user=True)
             st.markdown(
                 f"<div style='text-align: left; color: black; background-color: rgba(206, 187, 163, 0.5); '>You: {st.session_state.hst_chat[i]['content']}</div>",
                 unsafe_allow_html=True)
         elif st.session_state.hst_chat[i]["role"] == "assistant":
+            # msg(st.session_state.selected_task + ": " + st.session_state.hst_chat[i]['content'])
             st.markdown(
                 f"<div style='text-align: left; color: black; background-color: rgba(206, 187, 163, 1.0);'>{st.session_state.selected_task}: {st.session_state.hst_chat[i]['content']}</div>",
                 unsafe_allow_html=True)
 
         # Translation expander for user input
-        if i % 2 == 0:
-            translation_expander = st.expander("Show User Translation", expanded=False)
-            with translation_expander:
-                # Use translator_to_en for user's messages
-                translation_result = translator_to_en.translate(st.session_state.hst_chat[i]['content'])
-                st.write(translation_result)
+    if i % 2 == 0:
+        translation_expander = st.expander("Show User Translation", expanded=False)
+        with translation_expander:
+            # Use translator_to_en for user's messages
+            translation_result = translator_to_en.translate(st.session_state.hst_chat[i]['content'])
+            st.write(translation_result)
 
         # Translation expander for assistant responses
-        else:
-            translation_expander = st.expander("Show Assistant Translation")
-            with translation_expander:
-                # Use translator_from_en for assistant's responses
-                translation_result = translator_from_en.translate(st.session_state.hst_chat[i]['content'])
-                st.write(translation_result)
+    else:
+        translation_expander = st.expander("Show Assistant Translation")
+        with translation_expander:
+            # Use translator_from_en for assistant's responses
+            translation_result = translator_from_en.translate(st.session_state.hst_chat[i]['content'])
+            st.write(translation_result)
 
 # If chat history exists, show the 'Save & Export' button
 btn_save = st.button("Save & Export")
