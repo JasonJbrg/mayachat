@@ -99,7 +99,7 @@ selected_language = st.selectbox("Select your language", list(languages.keys()),
 
 if selected_language != 'Select...':
     # Initialize the Translator with the selected language
-    translator = Translator(to_lang="en", from_lang=languages[selected_language])
+    translator = Translator(to_lang="en", from_lang=languages[selected_language], provider="mymemory", secret_access_key="jason@jedburghco.com")
 
     # Add a default option to the task_selection list
     task_selection = ['Select...'] + task_selection
@@ -114,10 +114,8 @@ else:
     st.session_state.selected_task = None  # Set to None or some default value
 
 # Initialize two Translator objects with appropriate language settings
-translator_to_en = Translator(from_lang=languages[selected_language], to_lang="en")
-translator_from_en = Translator(from_lang="en", to_lang=languages[selected_language])
-
-
+translator_to_en = Translator(from_lang=languages[selected_language], to_lang="en", provider="mymemory", secret_access_key="jason@jedburghco.com")
+translator_from_en = Translator(from_lang="en", to_lang=languages[selected_language], provider="mymemory", secret_access_key="jason@jedburghco.com")
 
 
 # Apply styles
@@ -166,21 +164,11 @@ def get_initial_context(task):
     else:
         return "Please select a task."
         
-# Print the value of st.session_state.selected_task and the keys of initial_context
-st.write(f"Selected task: {st.session_state.selected_task}")
-st.write(f"Initial context keys: {initial_context.keys()}")
-
 # Prepare the conversation for the chat model
-if st.session_state.selected_task is not None:
-    conversation = [
-        {"role": "assistant", "content": initial_context[st.session_state.selected_task]},
-        {"role": "user", "content": user_prompt},  # use original prompt
-    ] + st.session_state.hst_chat
-else:
-    conversation = [
-        {"role": "user", "content": user_prompt},  # use original prompt
-    ] + st.session_state.hst_chat
-
+conversation = [
+    {"role": "assistant", "content": initial_context[st.session_state.selected_task]},
+    {"role": "user", "content": user_prompt},  # use original prompt
+] + st.session_state.hst_chat
 
 
 
