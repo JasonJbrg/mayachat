@@ -106,8 +106,8 @@ with container1:
     pass  # Container 1 is empty
 
 with container2:
-        # Get user input for language selection
-        selected_language = st.selectbox("Select your language", list(languages.keys()), key='language_selection')
+    # Get user input for language selection
+    selected_language = st.selectbox("Select your language", list(languages.keys()), key='language_selection')
     
     if selected_language != 'Select...':
         # Initialize the Translator with the selected language
@@ -139,7 +139,7 @@ with container2:
     if 'hst_chat' not in st.session_state:
         st.session_state.hst_chat = []
     if 'hst_chat_time' not in st.session_state:
-        st.session_state.hst_chat_time = []                            
+        st.session_state.hst_chat_time = []                                
 
 with container3:
     # Only proceed if a task is selected and the chat history is empty
