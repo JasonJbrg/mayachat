@@ -41,6 +41,9 @@ st.set_page_config(
     initial_sidebar_state="collapsed"
 )
 
+# Initialize selected_language
+selected_language = 'Select...'
+
 user_input_placeholder = st.empty()
 # Get user input
 if selected_language != 'Select...':
@@ -99,7 +102,6 @@ languages.update({
 })
 
 # Define default values for selected_language and selected_task
-selected_language = 'Select...'
 selected_task = 'Select...'
 
 # Get user input for language selection
