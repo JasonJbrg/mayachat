@@ -145,13 +145,13 @@ if selected_task != 'Select...' and not st.session_state.hst_chat:
 st.session_state.selected_task = selected_task
 
 
-# Add a placeholder for the user_prompt and btn_enter
-user_prompt_placeholder = st.empty()
-btn_enter_placeholder = st.empty()
 
-
-
-
+# Get user input
+if selected_language != 'Select...':
+    user_prompt = st.text_input(f"Start your chat (in {selected_language}):")
+else:
+    user_prompt = ''
+btn_enter = st.button("Enter")
 
 MAX_TOKENS = 500
 MAX_TOKENS_PER_MESSAGE = 50
@@ -187,8 +187,79 @@ if conversation[-1]["role"] == "user":
 
 
 
+
+
+    
+
+# Display chat history
+if st.session_state.hst_chat:
+    for i in range(len(st.session_state.hst_chat)):
+        if st.session_state.hst_chat[i]["role"] == "user":
+            st.markdown(
+                f"<div style='text-align: left; color: black; background-color: rgba(206, 187, 163, 0.5); '>You: {st.session_state.hst_chat[i]['content']}</div>",
+                unsafe_allow_html=True)
+        elif st.session_state.hst_chat[i]["role"] == "assistant":
+            st.markdown(
+                f"<div style='text-align: left; color: black; background-color: rgba(206, 187, 163, 1.0);'>{st.session_state.selected_task}: {st.session_state.hst_chat[i]['content']}</div>",
+                unsafe_allow_html=True)
+
+        # Translation expander for user input
+        if i % 2 == 0:
+            translation_expander = st.expander("Show User Translation", expanded=False)
+            with translation_expander:
+                # Use translator_to_en for user's messages
+                translation_result = translator_to_en.translate(st.session_state.hst_chat[i]['content'])
+                st.write(translation_result)
+
+        # Translation expander for assistant responses
+        else:
+            translation_expander = st.expander("Show Assistant Translation")
+            with translation_expander:
+                # Use translator_from_en for assistant's responses
+                translation_result = translator_from_en.translate(st.session_state.hst_chat[i]['content'])
+                st.write(translation_result)
+
+# If chat history exists, show the 'Save & Export' button
+btn_save = st.button("Save & Export")
+if btn_save:
+    # Create a Word document with chat history
+    doc = Document()
+
+    # Add the current date and time to the document
+    doc.add_paragraph(datetime.now().strftime('%m/%d/%Y %I:%M:%S %p'))
+
+    # Calculate the total duration
+    total_duration = st.session_state.hst_chat_time[-1] - st.session_state.hst_chat_time[0]
+
+    # Add the total duration to the document
+    doc.add_paragraph(f"Total Duration: {total_duration}")
+
+    # Add the chat history to the document
+    for message in st.session_state.hst_chat:
+        doc.add_paragraph(f"{message['role']}: {message['content']}")
+
+    # Save the Document into memory
+    f = io.BytesIO()
+    doc.save(f)
+
+    # Format current date and time
+    now = datetime.now()
+    date_time = now.strftime("%m%d%Y_%H%M%S")  # Changed format to remove slashes and colons
+
+    # Append date and time to the file name
+    f.name = "Chat_History_" + date_time + '.docx'  # Changed to a static string "Chat_History_"
+    f.seek(0)
+
+    # Download button for chat history Word document
+    st.download_button(
+        label="Download chat history",
+        data=f,
+        file_name=f.name,
+        mime='application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+    )
+
 # When 'Enter' button is clicked
-if st.session_state['btn_enter'] and st.session_state['user_prompt']:
+if btn_enter and user_prompt:
     # Translate user's input to English
     user_prompt_translated = translator_to_en.translate(user_prompt)
 
@@ -286,94 +357,3 @@ if st.session_state['btn_enter'] and st.session_state['user_prompt']:
         assistant_response = return_openai['choices'][0]['message']['content']
         st.session_state.hst_chat.append({"role": "assistant", "content": assistant_response})
         st.session_state.hst_chat_time.append(datetime.now())
-
-    
-
-# Display chat history
-if st.session_state.hst_chat:
-    for i in range(len(st.session_state.hst_chat)):
-        if st.session_state.hst_chat[i]["role"] == "user":
-            st.markdown(
-                f"<div style='text-align: left; color: black; background-color: rgba(206, 187, 163, 0.5); '>You: {st.session_state.hst_chat[i]['content']}</div>",
-                unsafe_allow_html=True)
-        elif st.session_state.hst_chat[i]["role"] == "assistant":
-            st.markdown(
-                f"<div style='text-align: left; color: black; background-color: rgba(206, 187, 163, 1.0);'>{st.session_state.selected_task}: {st.session_state.hst_chat[i]['content']}</div>",
-                unsafe_allow_html=True)
-
-        # Translation expander for user input
-        if i % 2 == 0:
-            translation_expander = st.expander("Show User Translation", expanded=False)
-            with translation_expander:
-                # Use translator_to_en for user's messages
-                translation_result = translator_to_en.translate(st.session_state.hst_chat[i]['content'])
-                st.write(translation_result)
-
-        # Translation expander for assistant responses
-        else:
-            translation_expander = st.expander("Show Assistant Translation")
-            with translation_expander:
-                # Use translator_from_en for assistant's responses
-                translation_result = translator_from_en.translate(st.session_state.hst_chat[i]['content'])
-                st.write(translation_result)
-
-# If chat history exists, show the 'Save & Export' button
-btn_save = st.button("Save & Export")
-if btn_save:
-    # Create a Word document with chat history
-    doc = Document()
-
-    # Add the current date and time to the document
-    doc.add_paragraph(datetime.now().strftime('%m/%d/%Y %I:%M:%S %p'))
-
-    # Calculate the total duration
-    total_duration = st.session_state.hst_chat_time[-1] - st.session_state.hst_chat_time[0]
-
-    # Add the total duration to the document
-    doc.add_paragraph(f"Total Duration: {total_duration}")
-
-    # Add the chat history to the document
-    for message in st.session_state.hst_chat:
-        doc.add_paragraph(f"{message['role']}: {message['content']}")
-
-    # Save the Document into memory
-    f = io.BytesIO()
-    doc.save(f)
-
-    # Format current date and time
-    now = datetime.now()
-    date_time = now.strftime("%m%d%Y_%H%M%S")  # Changed format to remove slashes and colons
-
-    # Append date and time to the file name
-    f.name = "Chat_History_" + date_time + '.docx'  # Changed to a static string "Chat_History_"
-    f.seek(0)
-
-    # Download button for chat history Word document
-    st.download_button(
-        label="Download chat history",
-        data=f,
-        file_name=f.name,
-        mime='application/vnd.openxmlformats-officedocument.wordprocessingml.document'
-    )
-
-# Define your Streamlit app
-def app():
-    # Initialize session state variables if they're not already set
-    if 'btn_enter' not in st.session_state:
-        st.session_state['btn_enter'] = False  # or any default value
-    if 'user_prompt' not in st.session_state:
-        st.session_state['user_prompt'] = ""  # or any default value
-
-# At the very end of your script, populate the placeholders with the respective components
-if selected_language != 'Select...':
-    user_prompt = user_prompt_placeholder.text_input(f"Start your chat (in {selected_language}):")
-else:
-    user_prompt = user_prompt_placeholder.text_input('')
-btn_enter = btn_enter_placeholder.button("Enter")
-
-
-
-
-
-   
-
