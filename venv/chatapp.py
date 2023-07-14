@@ -363,6 +363,16 @@ else:
     user_prompt = user_prompt_placeholder.text_input('')
 btn_enter = btn_enter_placeholder.button("Enter")
 
+if 'btn_enter' not in st.session_state:
+    st.session_state['btn_enter'] = False  # or some other default value
+
+if 'user_prompt' not in st.session_state:
+    st.session_state['user_prompt'] = ""  # or some other default value
+
+if st.session_state.btn_enter and st.session_state.user_prompt:
+    # Your code here...
+
+
 # Save user_prompt and btn_enter in SessionState
 st.session_state.user_prompt = user_prompt
 st.session_state.btn_enter = btn_enter
