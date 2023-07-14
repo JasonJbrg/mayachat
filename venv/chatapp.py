@@ -13,8 +13,6 @@ from docx import Document
 from datetime import datetime
 import random
 
-
-
 # Load environment variables from .env file
 dotenv_path = "PycharmProjects/.env"
 load_dotenv(dotenv_path)
@@ -42,12 +40,6 @@ st.set_page_config(
     layout="wide",
     initial_sidebar_state="collapsed"
 )
-ui_placeholder = st.empty()
-
-# Initialize selected_language
-selected_language = 'Select...'
-
-
 
 # Define the CSS styles
 streamlit_style = """
@@ -99,6 +91,7 @@ languages.update({
 })
 
 # Define default values for selected_language and selected_task
+selected_language = 'Select...'
 selected_task = 'Select...'
 
 # Get user input for language selection
@@ -153,7 +146,12 @@ st.session_state.selected_task = selected_task
 
 
 
-
+# Get user input
+if selected_language != 'Select...':
+    user_prompt = st.text_input(f"Start your chat (in {selected_language}):")
+else:
+    user_prompt = ''
+btn_enter = st.button("Enter")
 
 MAX_TOKENS = 500
 MAX_TOKENS_PER_MESSAGE = 50
@@ -319,9 +317,6 @@ if st.session_state.hst_chat:
                 translation_result = translator_from_en.translate(st.session_state.hst_chat[i]['content'])
                 st.write(translation_result)
 
-
-
-
 # If chat history exists, show the 'Save & Export' button
 btn_save = st.button("Save & Export")
 if btn_save:
@@ -360,14 +355,3 @@ if btn_save:
         file_name=f.name,
         mime='application/vnd.openxmlformats-officedocument.wordprocessingml.document'
     )
-user_input_placeholder = st.empty()
-# Get user input
-if selected_language != 'Select...':
-    user_prompt = user_input_placeholder.text_input(f"Start your chat (in {selected_language}):", key='user_prompt')
-else:
-    user_prompt = ''
-btn_enter = user_input_placeholder.button("Enter", key='btn_enter')
-
-user_prompt = ui_placeholder.text_input("Please enter your input", key='user_input')
-btn_enter = ui_placeholder.button('Enter')
-
