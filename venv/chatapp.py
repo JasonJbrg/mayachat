@@ -261,7 +261,7 @@ with container3:
             mime='application/vnd.openxmlformats-officedocument.wordprocessingml.document'
         )
     
-with container4(**{'align_bottom': True}):
+with st.container(**{'align_bottom': True}):
     # Get user input
     if selected_language != 'Select...':
         user_prompt = st.text_input(f"Start your chat (in {selected_language}):")
