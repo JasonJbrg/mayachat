@@ -224,7 +224,7 @@ with container3:
                     st.write(translation_result)
     
     with container4:
-        col1, col2 = st.columns([4, 1])
+        col1, col2 = st.columns([5, 1])
         # If chat history exists, show the 'Save & Export' button
         with col1:
             pass    # Empty column
