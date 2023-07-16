@@ -102,8 +102,7 @@ container2 = st.container()
       
     
 
-def main():
-    container1 = st.container(background_color="red")
+
     with container1:
     
     
@@ -370,5 +369,4 @@ def main():
                 assistant_response = return_openai['choices'][0]['message']['content']
                 st.session_state.hst_chat.append({"role": "assistant", "content": assistant_response})
                 st.session_state.hst_chat_time.append(datetime.now())
-    if __name__ == "__main__":
-        main()
+  
