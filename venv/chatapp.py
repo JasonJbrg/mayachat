@@ -223,7 +223,7 @@ with container3:
                     translation_result = translator_from_en.translate(st.session_state.hst_chat[i]['content'])
                     st.write(translation_result)
     
-    with container4
+    with container4:
         col1, col2 = st.columns([4, 1])
         # If chat history exists, show the 'Save & Export' button
         with col1:
