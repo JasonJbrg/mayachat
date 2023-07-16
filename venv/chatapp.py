@@ -96,17 +96,15 @@ selected_task = 'Select...'
 
 # Create containers
 
-container1 = st.container()
-container2 = st.container()
+
 container3 = st.container()
 container4 = st.container()
       
     
 
-with container1:
-    pass  # Container 1 is empty
 
-with container2:
+
+
     # Get user input for language selection
     selected_language = st.selectbox("Select your language", list(languages.keys()), key='language_selection')
     
