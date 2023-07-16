@@ -104,6 +104,8 @@ container2 = st.container()
 
 
 with container1:
+container1 = st.container(background_color="red")
+
     # Get user input for language selection
     selected_language = st.selectbox("Select your language", list(languages.keys()), key='language_selection')
     
