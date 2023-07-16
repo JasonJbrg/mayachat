@@ -98,7 +98,7 @@ selected_task = 'Select...'
 
 
 container3 = st.container()
-container4 = st.container()
+container2 = st.container()
       
     
 
@@ -259,7 +259,7 @@ with container3:
             mime='application/vnd.openxmlformats-officedocument.wordprocessingml.document'
         )
     
-with container4:
+with container2:
     # Get user input
     if selected_language != 'Select...':
         user_prompt = st.text_input(f"Start your chat (in {selected_language}):")
