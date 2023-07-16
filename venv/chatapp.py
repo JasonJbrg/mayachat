@@ -96,10 +96,10 @@ selected_task = 'Select...'
 
 # Create containers
 
-container1 = st.container()
-container3 = st.container()
-container4 = st.container()
-container2 = st.container()
+container1 = st.container(style="background-color: #00FF00;")
+container3 = st.container(style="background-color: #00FF00;")
+container4 = st.container(style="background-color: #00FF00;")
+container2 = st.container(style="background-color: #00FF00;")
       
     
 
