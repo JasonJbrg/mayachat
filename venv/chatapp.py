@@ -48,7 +48,7 @@ streamlit_style = """
 
     #root {
         font-family: 'IBM Plex Mono', monospace !important;
-        background-color: #4F5223 !important;
+        background-color: #00FF00 !important;
         color: white !important;
     }
     .custom-title {
