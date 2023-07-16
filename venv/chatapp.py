@@ -227,7 +227,7 @@ with container3:
         col1, col2 = st.columns([4, 1])
         # If chat history exists, show the 'Save & Export' button
         with col1:
-        # Empty column
+            pass    # Empty column
         with col2:
             btn_save = st.button("Save & Export")
             if btn_save:
