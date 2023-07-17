@@ -135,8 +135,8 @@ if selected_language != 'Select...':
 # Get user input
 prompt = st.chat_input("Say something")
 if prompt:
-    new_message = {"role": "user", "content": prompt}
-        
+    new_message = {"role": "user", "content": prompt, "original_content": prompt}
+    
 # Initialize conversation in session state if not already present
 if 'conversation' not in st.session_state:
     st.session_state.conversation = []
@@ -146,7 +146,7 @@ if new_message is not None:
     # Translate user's input to English
     user_prompt_translated = translator_to_en.translate(new_message['content'])
 
-    # Add user's translated response to the chat history
+    # Add user's original response (not translated) to the chat history
     st.session_state.hst_chat.append(new_message)
     st.session_state.hst_chat_time.append(datetime.now())
 
@@ -168,6 +168,7 @@ if new_message is not None:
             assistant_response = return_openai['choices'][0]['message']['content']
             st.session_state.hst_chat.append({"role": "assistant", "content": assistant_response})
             st.session_state.hst_chat_time.append(datetime.now())
+
 
 
 # Apply styles
