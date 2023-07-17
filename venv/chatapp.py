@@ -132,10 +132,10 @@ if selected_language != 'Select...':
             st.session_state.hst_chat.append({"role": "assistant", "content": greeting_translated})
             st.session_state.hst_chat_time.append(datetime.now())
     
-    # Get user input
-    prompt = st.chat_input("Say something")
-    if prompt:
-        new_message = {"role": "user", "content": prompt}
+# Get user input
+prompt = st.chat_input("Say something")
+if prompt:
+    new_message = {"role": "user", "content": prompt}
         
 # Initialize conversation in session state if not already present
 if 'conversation' not in st.session_state:
@@ -143,15 +143,12 @@ if 'conversation' not in st.session_state:
 
 # Check if a new message was submitted
 if new_message is not None:
-    # Translate user's input to English
-    user_prompt_translated = translator_to_en.translate(new_message['content'])
-
-    # Add user's translated response to the chat history
-    st.session_state.hst_chat.append({"role": "user", "content": user_prompt_translated})
+    # Add user's original response to the chat history
+    st.session_state.hst_chat.append(new_message)
     st.session_state.hst_chat_time.append(datetime.now())
 
-    # Add user's translated response to the conversation
-    st.session_state.conversation.append({"role": "user", "content": user_prompt_translated})
+    # Add user's response to the conversation
+    st.session_state.conversation.append(new_message)
 
     # Only generate a response if the last message was from the user
     if len(st.session_state.hst_chat) >= 2 and st.session_state.hst_chat[-2]["role"] == "user":
@@ -168,6 +165,7 @@ if new_message is not None:
             assistant_response = return_openai['choices'][0]['message']['content']
             st.session_state.hst_chat.append({"role": "assistant", "content": assistant_response})
             st.session_state.hst_chat_time.append(datetime.now())
+
 
 
 # Apply styles
@@ -334,45 +332,50 @@ if st.session_state.hst_chat:
         else:
             translation_expander = st.expander("Show Assistant Translation")
             with translation_expander:
-                # Use translator_from_en for assistant's responses
-                translation_result = translator_from_en.translate(st.session_state.hst_chat[i]['content'])
+                # Use translator_to_en for assistant's responses
+                # We are assuming that the assistant's responses are not in English. 
+                # If they are in English, you do not need to translate them. 
+                translation_result = translator_to_en.translate(st.session_state.hst_chat[i]['content'])
                 st.write(translation_result)
 
+
 # If chat history exists, show the 'Save & Export' button
-btn_save = st.button("Save & Export")
-if btn_save:
-    # Create a Word document with chat history
-    doc = Document()
+if st.session_state.hst_chat:
+    btn_save = st.button("Save & Export")
+    if btn_save:
+        # Create a Word document with chat history
+        doc = Document()
 
-    # Add the current date and time to the document
-    doc.add_paragraph(datetime.now().strftime('%m/%d/%Y %I:%M:%S %p'))
+        # Add the current date and time to the document
+        doc.add_paragraph(datetime.now().strftime('%m/%d/%Y %I:%M:%S %p'))
 
-    # Calculate the total duration
-    total_duration = st.session_state.hst_chat_time[-1] - st.session_state.hst_chat_time[0]
+        # Calculate the total duration
+        total_duration = st.session_state.hst_chat_time[-1] - st.session_state.hst_chat_time[0]
 
-    # Add the total duration to the document
-    doc.add_paragraph(f"Total Duration: {total_duration}")
+        # Add the total duration to the document
+        doc.add_paragraph(f"Total Duration: {total_duration}")
 
-    # Add the chat history to the document
-    for message in st.session_state.hst_chat:
-        doc.add_paragraph(f"{message['role']}: {message['content']}")
+        # Add the chat history to the document
+        for message in st.session_state.hst_chat:
+            doc.add_paragraph(f"{message['role']}: {message['content']}")
 
-    # Save the Document into memory
-    f = io.BytesIO()
-    doc.save(f)
+        # Save the Document into memory
+        f = io.BytesIO()
+        doc.save(f)
 
-    # Format current date and time
-    now = datetime.now()
-    date_time = now.strftime("%m%d%Y_%H%M%S")  # Changed format to remove slashes and colons
+        # Format current date and time
+        now = datetime.now()
+        date_time = now.strftime("%m%d%Y_%H%M%S")  # Changed format to remove slashes and colons
 
-    # Append date and time to the file name
-    f.name = "Chat_History_" + date_time + '.docx'  # Changed to a static string "Chat_History_"
-    f.seek(0)
+        # Append date and time to the file name
+        f.name = "Chat_History_" + date_time + '.docx'  # Changed to a static string "Chat_History_"
+        f.seek(0)
 
-    # Download button for chat history Word document
-    st.download_button(
-        label="Download chat history",
-        data=f,
-        file_name=f.name,
-        mime='application/vnd.openxmlformats-officedocument.wordprocessingml.document'
-    )
+        # Download button for chat history Word document
+        st.download_button(
+            label="Download chat history",
+            data=f,
+            file_name=f.name,
+            mime='application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+        )
+
