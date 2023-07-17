@@ -136,8 +136,10 @@ if selected_language != 'Select...':
     prompt = st.chat_input("Say something")
     if prompt:
         new_message = {"role": "user", "content": prompt}
-    
 
+# Initialize conversation to an empty list
+conversation = []
+    
 # Check if a new message was submitted
 if new_message is not None:
     # Translate user's input to English
