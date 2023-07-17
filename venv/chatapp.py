@@ -46,14 +46,14 @@ st.set_page_config(
 hide_streamlit_style = """
             <style>
             @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono&display=swap');
-            #MainMenu {visibility: hidden;}
-            footer {visibility: hidden;}
-            header {visibility: hidden;}
-            body {
+
+            #root {
                 font-family: 'IBM Plex Mono', monospace;
                 background-color: #4F5223;
             }
-            
+            #MainMenu {visibility: hidden;}
+            footer {visibility: hidden;}
+            header {visibility: hidden;}
             </style>
             """
 st.markdown(hide_streamlit_style, unsafe_allow_html=True) 
