@@ -13,6 +13,7 @@ from docx import Document
 from datetime import datetime
 import random
 
+
 # Load environment variables from .env file
 dotenv_path = "PycharmProjects/.env"
 load_dotenv(dotenv_path)
@@ -94,12 +95,21 @@ languages.update({
 selected_language = 'Select...'
 selected_task = 'Select...'
 
+
+# Initialize new_message and return_openai to None
+new_message = None
+return_openai = None
+
 # Get user input for language selection
 selected_language = st.selectbox("Select your language", list(languages.keys()), key='language_selection')
 
 if selected_language != 'Select...':
     # Initialize the Translator with the selected language
     translator = Translator(to_lang="en", from_lang=languages[selected_language])
+
+    # Initialize two Translator objects with appropriate language settings
+    translator_to_en = Translator(from_lang=languages[selected_language], to_lang="en")
+    translator_from_en = Translator(from_lang="en", to_lang=languages[selected_language])
 
     # Add a default option to the task_selection list
     task_selection = ['Select...'] + task_selection
@@ -110,12 +120,55 @@ if selected_language != 'Select...':
     # Only update the selected task in session state if a task is selected
     if selected_task != 'Select...':
         st.session_state.selected_task = selected_task
-else:
-    st.session_state.selected_task = None  # Set to None or some default value
 
-# Initialize two Translator objects with appropriate language settings
-translator_to_en = Translator(from_lang=languages[selected_language], to_lang="en")
-translator_from_en = Translator(from_lang="en", to_lang=languages[selected_language])
+        # Only proceed if a task is selected and the chat history is empty
+        if not st.session_state.hst_chat:
+            # Update the selected task in session state
+            st.session_state.selected_task = selected_task
+            # Choose a random greeting for the selected task
+            greeting = random.choice(greetings[selected_task])
+            # Translate the greeting to the target language using translator_from_en
+            greeting_translated = translator_from_en.translate(greeting)
+            st.session_state.hst_chat.append({"role": "assistant", "content": greeting_translated})
+            st.session_state.hst_chat_time.append(datetime.now())
+    
+    # Get user input
+    prompt = st.chat_input("Say something")
+    if prompt:
+        new_message = {"role": "user", "content": prompt}
+        
+# Initialize conversation in session state if not already present
+if 'conversation' not in st.session_state:
+    st.session_state.conversation = []
+
+# Check if a new message was submitted
+if new_message is not None:
+    # Translate user's input to English
+    user_prompt_translated = translator_to_en.translate(new_message['content'])
+
+    # Add user's translated response to the chat history
+    st.session_state.hst_chat.append({"role": "user", "content": user_prompt_translated})
+    st.session_state.hst_chat_time.append(datetime.now())
+
+    # Add user's translated response to the conversation
+    st.session_state.conversation.append({"role": "user", "content": user_prompt_translated})
+
+    # Only generate a response if the last message was from the user
+    if len(st.session_state.hst_chat) >= 2 and st.session_state.hst_chat[-2]["role"] == "user":
+        # Use OpenAI API to get a response from the chat model
+        return_openai = openai.ChatCompletion.create(
+            model="gpt-3.5-turbo",
+            messages=st.session_state.conversation,
+            max_tokens=MAX_TOKENS,
+            n=1
+        )
+
+        # Add assistant's response to the chat history
+        if return_openai:
+            assistant_response = return_openai['choices'][0]['message']['content']
+            st.session_state.hst_chat.append({"role": "assistant", "content": assistant_response})
+            st.session_state.hst_chat_time.append(datetime.now())
+
 
 # Apply styles
 st.markdown(streamlit_style, unsafe_allow_html=True)
@@ -146,12 +199,8 @@ st.session_state.selected_task = selected_task
 
 
 
-# Get user input
-if selected_language != 'Select...':
-    user_prompt = st.text_input(f"Start your chat (in {selected_language}):")
-else:
-    user_prompt = ''
-btn_enter = st.button("Enter")
+
+
 
 MAX_TOKENS = 500
 MAX_TOKENS_PER_MESSAGE = 50
@@ -162,6 +211,9 @@ def get_initial_context(task):
         return initial_context[task]
     else:
         return "Please select a task."
+
+# Initialize conversation to an empty list
+conversation = []
         
 # Prepare the conversation for the chat model
 if 'selected_task' in st.session_state and st.session_state.selected_task is not None and st.session_state.selected_task in initial_context:
@@ -176,7 +228,7 @@ else:
 
 
 # Only generate a response if the last message was from the user
-if conversation[-1]["role"] == "user":
+if conversation and conversation[-1]["role"] == "user":
     # Use OpenAI API to get a response from the chat model
     return_openai = openai.ChatCompletion.create(
         model="gpt-3.5-turbo",
@@ -184,37 +236,6 @@ if conversation[-1]["role"] == "user":
         max_tokens=MAX_TOKENS,
         n=1
     )
-
-
-
-# When 'Enter' button is clicked
-if btn_enter and user_prompt:
-    # Translate user's input to English
-    user_prompt_translated = translator_to_en.translate(user_prompt)
-
-    # Add user's translated response to the chat history
-    st.session_state.hst_chat.append({"role": "user", "content": user_prompt_translated})
-    st.session_state.hst_chat_time.append(datetime.now())
-
-    # Add user's translated response to the conversation
-    conversation.append({"role": "user", "content": user_prompt_translated})
-
-    # Only generate a response if the last message was from the user
-    if st.session_state.hst_chat[-2]["role"] == "user":
-        # Use OpenAI API to get a response from the chat model
-        return_openai = openai.ChatCompletion.create(
-            model="gpt-3.5-turbo",
-            messages=conversation,
-            max_tokens=MAX_TOKENS,
-            n=1
-        )
-
-        # Add assistant's response to the chat history
-        assistant_response = return_openai['choices'][0]['message']['content']
-        st.session_state.hst_chat.append({"role": "assistant", "content": assistant_response})
-        st.session_state.hst_chat_time.append(datetime.now())
-
-    
 
     # Calculate the total number of tokens in the conversation
     total_tokens = sum(len(message['content'].split()) for message in conversation)
