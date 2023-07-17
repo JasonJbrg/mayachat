@@ -45,6 +45,7 @@ st.set_page_config(
 
 hide_streamlit_style = """
             <style>
+            @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono&display=swap');
             #MainMenu {visibility: hidden;}
             footer {visibility: hidden;}
             header {visibility: hidden;}
