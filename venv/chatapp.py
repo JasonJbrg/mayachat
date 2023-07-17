@@ -136,10 +136,8 @@ if selected_language != 'Select...':
     prompt = st.chat_input("Say something")
     if prompt:
         new_message = {"role": "user", "content": prompt}
-
-# Initialize conversation to an empty list
-conversation = []
     
+
 # Check if a new message was submitted
 if new_message is not None:
     # Translate user's input to English
@@ -167,9 +165,6 @@ if new_message is not None:
             assistant_response = return_openai['choices'][0]['message']['content']
             st.session_state.hst_chat.append({"role": "assistant", "content": assistant_response})
             st.session_state.hst_chat_time.append(datetime.now())
-
-
-
 
 # Apply styles
 st.markdown(streamlit_style, unsafe_allow_html=True)
