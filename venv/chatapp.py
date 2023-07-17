@@ -52,7 +52,7 @@ hide_streamlit_style = """
                 background-color: #4F5223;
                
             }
-            ..css-q8sbsg p {
+            ..css-q8sbsg.p {
                 color: white;
             }
             #MainMenu {visibility: hidden;}
