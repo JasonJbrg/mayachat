@@ -13,13 +13,6 @@ from docx import Document
 from datetime import datetime
 import random
 
-# Hide the Streamlit header and footer
-hide_st_style = """
-#MainMenu, header, footer {visibility: hidden;}
-"""
-st.markdown(hide_st_style, unsafe_allow_html=True)
-
-
 # Load environment variables from .env file
 dotenv_path = "PycharmProjects/.env"
 load_dotenv(dotenv_path)
@@ -46,6 +39,11 @@ st.set_page_config(
     page_title="Maya Lingo",
     layout="wide",
     initial_sidebar_state="collapsed"
+    menu_items={
+        'Get Help': None,
+        'Report a Bug': None,
+        'About': None,
+    }
 )
 
 # Define the CSS styles
