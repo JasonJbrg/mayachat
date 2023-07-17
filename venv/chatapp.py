@@ -21,6 +21,15 @@ load_dotenv(dotenv_path)
 with open("venv/config.json") as file:
     config = json.load(file)
 
+hide_streamlit_style = """
+            <style>
+            #MainMenu {visibility: hidden;}
+            footer {visibility: hidden;}
+            </style>
+            """
+st.markdown(hide_streamlit_style, unsafe_allow_html=True) 
+
+
 # Extract the values from the config dictionary
 task_selection = config["task_selection"]
 initial_context = {
