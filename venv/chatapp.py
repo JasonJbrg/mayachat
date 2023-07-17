@@ -149,7 +149,12 @@ st.session_state.selected_task = selected_task
 
 
 # Get user input
-new_message = chat_input(st.session_state.hst_chat)
+prompt = st.chat_input("Say something")
+if prompt:
+    new_message = {"role": "user", "content": prompt}
+else:
+    new_message = None
+
 
 # Check if a new message was submitted
 if new_message:
