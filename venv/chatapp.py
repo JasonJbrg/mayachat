@@ -12,7 +12,6 @@ import io
 from docx import Document
 from datetime import datetime
 import random
-from streamlit_chat import chat_input
 
 
 # Load environment variables from .env file
