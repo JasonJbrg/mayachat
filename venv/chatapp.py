@@ -50,6 +50,7 @@ hide_streamlit_style = """
             .css-uf99v8 {
                 font-family: 'IBM Plex Mono', monospace;
                 background-color: #4F5223;
+                color: white;
             }
             #MainMenu {visibility: hidden;}
             footer {visibility: hidden;}
