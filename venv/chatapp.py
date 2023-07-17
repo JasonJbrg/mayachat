@@ -132,10 +132,10 @@ if selected_language != 'Select...':
             st.session_state.hst_chat.append({"role": "assistant", "content": greeting_translated})
             st.session_state.hst_chat_time.append(datetime.now())
     
-    # Get user input
-    prompt = st.chat_input("Say something")
-    if prompt:
-        new_message = {"role": "user", "content": prompt}
+# Get user input
+prompt = st.chat_input("Say something")
+if prompt:
+    new_message = {"role": "user", "content": prompt}
         
 # Initialize conversation in session state if not already present
 if 'conversation' not in st.session_state:
