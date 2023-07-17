@@ -184,8 +184,7 @@ st.session_state.selected_task = selected_task
 
 
 
-# Initialize conversation to an empty list
-conversation = []
+
 
 
 MAX_TOKENS = 500
@@ -197,6 +196,9 @@ def get_initial_context(task):
         return initial_context[task]
     else:
         return "Please select a task."
+
+# Initialize conversation to an empty list
+conversation = []
         
 # Prepare the conversation for the chat model
 if 'selected_task' in st.session_state and st.session_state.selected_task is not None and st.session_state.selected_task in initial_context:
