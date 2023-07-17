@@ -21,13 +21,7 @@ load_dotenv(dotenv_path)
 with open("venv/config.json") as file:
     config = json.load(file)
 
-hide_streamlit_style = """
-            <style>
-            #MainMenu {visibility: hidden;}
-            footer {visibility: hidden;}
-            </style>
-            """
-st.markdown(hide_streamlit_style, unsafe_allow_html=True) 
+
 
 
 # Extract the values from the config dictionary
@@ -48,6 +42,14 @@ st.set_page_config(
     page_title="Maya Lingo",
     layout="wide",    
 )
+
+hide_streamlit_style = """
+            <style>
+            #MainMenu {visibility: hidden;}
+            footer {visibility: hidden;}
+            </style>
+            """
+st.markdown(hide_streamlit_style, unsafe_allow_html=True) 
 
 
 # Add a default option to the languages dictionary
