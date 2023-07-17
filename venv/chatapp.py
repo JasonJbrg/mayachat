@@ -102,6 +102,10 @@ if selected_language != 'Select...':
     # Initialize the Translator with the selected language
     translator = Translator(to_lang="en", from_lang=languages[selected_language])
 
+    # Initialize two Translator objects with appropriate language settings
+    translator_to_en = Translator(from_lang=languages[selected_language], to_lang="en")
+    translator_from_en = Translator(from_lang="en", to_lang=languages[selected_language])
+
     # Add a default option to the task_selection list
     task_selection = ['Select...'] + task_selection
 
@@ -111,12 +115,21 @@ if selected_language != 'Select...':
     # Only update the selected task in session state if a task is selected
     if selected_task != 'Select...':
         st.session_state.selected_task = selected_task
+
+        # Only proceed if a task is selected and the chat history is empty
+        if not st.session_state.hst_chat:
+            # Update the selected task in session state
+            st.session_state.selected_task = selected_task
+            # Choose a random greeting for the selected task
+            greeting = random.choice(greetings[selected_task])
+            # Translate the greeting to the target language using translator_from_en
+            greeting_translated = translator_from_en.translate(greeting)
+            st.session_state.hst_chat.append({"role": "assistant", "content": greeting_translated})
+            st.session_state.hst_chat_time.append(datetime.now())
 else:
     st.session_state.selected_task = None  # Set to None or some default value
 
-# Initialize two Translator objects with appropriate language settings
-translator_to_en = Translator(from_lang=languages[selected_language], to_lang="en")
-translator_from_en = Translator(from_lang="en", to_lang=languages[selected_language])
+
 
 # Apply styles
 st.markdown(streamlit_style, unsafe_allow_html=True)
