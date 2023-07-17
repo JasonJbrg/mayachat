@@ -45,6 +45,7 @@ st.set_page_config(
         'About': None,
     }
 )
+st.markdown(streamlit_style, unsafe_allow_html=True)
 
 
 # Add a default option to the languages dictionary
@@ -138,8 +139,8 @@ if new_message is not None:
 
 
 
-# Apply styles
-st.markdown(streamlit_style, unsafe_allow_html=True)
+
+
 
 # Add a default option to the task_selection list
 task_selection = ['Select...'] + task_selection
