@@ -315,7 +315,7 @@ if st.session_state.hst_chat:
     for i in range(len(st.session_state.hst_chat)):
         if st.session_state.hst_chat[i]["role"] == "user":
             st.markdown(
-                f"<div style='text-align: left; color: black; background-color: rgba(206, 187, 163, 0.5); '>You: {st.session_state.hst_chat[i]['content']}</div>",
+                f"<div style='text-align: left; color: black; background-color: rgba(206, 187, 163, 0.5); '>You: {st.session_state.hst_chat[i]['original_content']}</div>",
                 unsafe_allow_html=True)
         elif st.session_state.hst_chat[i]["role"] == "assistant":
             st.markdown(
