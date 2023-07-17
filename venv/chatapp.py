@@ -310,6 +310,7 @@ if conversation and conversation[-1]["role"] == "user":
 
 # Display chat history
 if st.session_state.hst_chat:
+    print(st.session_state.hst_chat)
     for i in range(len(st.session_state.hst_chat)):
         if st.session_state.hst_chat[i]["role"] == "user":
             st.markdown(
