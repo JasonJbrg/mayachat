@@ -78,8 +78,8 @@ languages.update({
 })
 
 # Define default values for selected_language and selected_task
-selected_language = 'Select...'
-selected_task = 'Select...'
+selected_language = 'Select Language'
+selected_task = 'Select Topic'
 
 
 # Initialize new_message and return_openai to None
@@ -87,9 +87,9 @@ new_message = None
 return_openai = None
 
 # Get user input for language selection
-selected_language = st.selectbox("Select your language", list(languages.keys()), key='language_selection')
+selected_language = st.selectbox(list(languages.keys()), key='language_selection')
 
-if selected_language != 'Select...':
+if selected_language != 'Select Language':
     # Initialize the Translator with the selected language
     translator = Translator(to_lang="en", from_lang=languages[selected_language])
 
@@ -98,13 +98,13 @@ if selected_language != 'Select...':
     translator_from_en = Translator(from_lang="en", to_lang=languages[selected_language])
 
     # Add a default option to the task_selection list
-    task_selection = ['Select...'] + task_selection
+    task_selection = ['Select Topic'] + task_selection
 
     # Get user input for task selection
-    selected_task = st.selectbox("Select a task", task_selection, key='task_selection')
+    selected_task = st.selectbox(task_selection, key='task_selection')
 
     # Only update the selected task in session state if a task is selected
-    if selected_task != 'Select...':
+    if selected_task != 'Select Topic':
         st.session_state.selected_task = selected_task
 
         # Only proceed if a task is selected and the chat history is empty
