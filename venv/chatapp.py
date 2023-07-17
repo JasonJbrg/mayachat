@@ -136,7 +136,7 @@ if selected_language != 'Select...':
 prompt = st.chat_input("Say something")
 if prompt:
     new_message = {"role": "user", "content": prompt}
-
+        
 # Initialize conversation in session state if not already present
 if 'conversation' not in st.session_state:
     st.session_state.conversation = []
@@ -165,7 +165,6 @@ if new_message is not None:
             assistant_response = return_openai['choices'][0]['message']['content']
             st.session_state.hst_chat.append({"role": "assistant", "content": assistant_response})
             st.session_state.hst_chat_time.append(datetime.now())
-
 
 
 
@@ -313,9 +312,8 @@ if conversation and conversation[-1]["role"] == "user":
 if st.session_state.hst_chat:
     for i in range(len(st.session_state.hst_chat)):
         if st.session_state.hst_chat[i]["role"] == "user":
-            # Use original user input here
             st.markdown(
-                f"<div style='text-align: left; color: black; background-color: rgba(206, 187, 163, 0.5); '>You: {st.session_state.hst_chat[i]['original_content']}</div>",
+                f"<div style='text-align: left; color: black; background-color: rgba(206, 187, 163, 0.5); '>You: {st.session_state.hst_chat[i]['content']}</div>",
                 unsafe_allow_html=True)
         elif st.session_state.hst_chat[i]["role"] == "assistant":
             st.markdown(
