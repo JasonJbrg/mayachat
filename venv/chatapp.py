@@ -310,7 +310,6 @@ if conversation and conversation[-1]["role"] == "user":
 
 # Display chat history
 if st.session_state.hst_chat:
-    print(st.session_state.hst_chat)
     for i in range(len(st.session_state.hst_chat)):
         if st.session_state.hst_chat[i]["role"] == "user":
             st.markdown(
@@ -333,9 +332,12 @@ if st.session_state.hst_chat:
         else:
             translation_expander = st.expander("Show Assistant Translation")
             with translation_expander:
-                # Use translator_from_en for assistant's responses
-                translation_result = translator_from_en.translate(st.session_state.hst_chat[i]['content'])
+                # Use translator_to_en for assistant's responses
+                # We are assuming that the assistant's responses are not in English. 
+                # If they are in English, you do not need to translate them. 
+                translation_result = translator_to_en.translate(st.session_state.hst_chat[i]['content'])
                 st.write(translation_result)
+
 
 # If chat history exists, show the 'Save & Export' button
 btn_save = st.button("Save & Export")
