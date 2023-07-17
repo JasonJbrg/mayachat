@@ -201,7 +201,7 @@ if conversation[-1]["role"] == "user":
 # Check if a new message was submitted
 if new_message:
     # Translate user's input to English
-    user_prompt_translated = translator_to_en.translate(prompt)
+    user_prompt_translated = translator_to_en.translate(user_prompt)
 
     # Add user's translated response to the chat history
     st.session_state.hst_chat.append({"role": "user", "content": user_prompt_translated})
