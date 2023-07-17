@@ -46,41 +46,7 @@ st.set_page_config(
     }
 )
 
-# Define the CSS styles
-streamlit_style = """
-    <style>
-    @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono&display=swap');
 
-    #root {
-        font-family: 'IBM Plex Mono', monospace !important;
-        background-color: #4F5223 !important;
-        color: white !important;
-    }
-    .custom-title {
-        overflow: hidden;
-        color: white;
-        font-size: 1.3em;
-        animation: typewriter 4s steps(50) 1s both;
-        white-space: nowrap;
-        padding-bottom: 50px;
-
-    }
-         /* Hide the Streamlit footer */
-    .reportview-container .main footer {
-        visibility: hidden;
-    }
-
-    }
-    @keyframes typewriter {
-        0% {
-            width: 0;
-        }
-        100% {
-            width: 100%;
-        }
-    }
-    </style>
-"""
 # Add a default option to the languages dictionary
 languages = {'Select...': ''}
 
