@@ -340,40 +340,42 @@ if st.session_state.hst_chat:
 
 
 # If chat history exists, show the 'Save & Export' button
-btn_save = st.button("Save & Export")
-if btn_save:
-    # Create a Word document with chat history
-    doc = Document()
+if st.session_state.hst_chat:
+    btn_save = st.button("Save & Export")
+    if btn_save:
+        # Create a Word document with chat history
+        doc = Document()
 
-    # Add the current date and time to the document
-    doc.add_paragraph(datetime.now().strftime('%m/%d/%Y %I:%M:%S %p'))
+        # Add the current date and time to the document
+        doc.add_paragraph(datetime.now().strftime('%m/%d/%Y %I:%M:%S %p'))
 
-    # Calculate the total duration
-    total_duration = st.session_state.hst_chat_time[-1] - st.session_state.hst_chat_time[0]
+        # Calculate the total duration
+        total_duration = st.session_state.hst_chat_time[-1] - st.session_state.hst_chat_time[0]
 
-    # Add the total duration to the document
-    doc.add_paragraph(f"Total Duration: {total_duration}")
+        # Add the total duration to the document
+        doc.add_paragraph(f"Total Duration: {total_duration}")
 
-    # Add the chat history to the document
-    for message in st.session_state.hst_chat:
-        doc.add_paragraph(f"{message['role']}: {message['content']}")
+        # Add the chat history to the document
+        for message in st.session_state.hst_chat:
+            doc.add_paragraph(f"{message['role']}: {message['content']}")
 
-    # Save the Document into memory
-    f = io.BytesIO()
-    doc.save(f)
+        # Save the Document into memory
+        f = io.BytesIO()
+        doc.save(f)
 
-    # Format current date and time
-    now = datetime.now()
-    date_time = now.strftime("%m%d%Y_%H%M%S")  # Changed format to remove slashes and colons
+        # Format current date and time
+        now = datetime.now()
+        date_time = now.strftime("%m%d%Y_%H%M%S")  # Changed format to remove slashes and colons
 
-    # Append date and time to the file name
-    f.name = "Chat_History_" + date_time + '.docx'  # Changed to a static string "Chat_History_"
-    f.seek(0)
+        # Append date and time to the file name
+        f.name = "Chat_History_" + date_time + '.docx'  # Changed to a static string "Chat_History_"
+        f.seek(0)
 
-    # Download button for chat history Word document
-    st.download_button(
-        label="Download chat history",
-        data=f,
-        file_name=f.name,
-        mime='application/vnd.openxmlformats-officedocument.wordprocessingml.document'
-    )
+        # Download button for chat history Word document
+        st.download_button(
+            label="Download chat history",
+            data=f,
+            file_name=f.name,
+            mime='application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+        )
+
