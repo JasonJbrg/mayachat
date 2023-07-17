@@ -217,6 +217,8 @@ if conversation[-1]["role"] == "user":
 
 
 # Check if a new message was submitted
+print(f"new_message is defined: {'new_message' in locals()}")
+print(f"new_message: {new_message}")
 if new_message:
     # Translate user's input to English
     user_prompt_translated = translator_to_en.translate(user_prompt)
