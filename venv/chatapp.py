@@ -47,7 +47,7 @@ hide_streamlit_style = """
             <style>
             @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono&display=swap');
             
-            .css-q8sbsg p {
+            .css-uf99v8 {
                 font-family: 'IBM Plex Mono', monospace;
                 background-color: #4F5223;
             }
