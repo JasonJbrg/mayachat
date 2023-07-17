@@ -17,6 +17,8 @@ import random
 hide_st_style = """
 #MainMenu, header, footer {visibility: hidden;}
 """
+st.markdown(hide_st_style, unsafe_allow_html=True)
+
 
 # Load environment variables from .env file
 dotenv_path = "PycharmProjects/.env"
