@@ -37,13 +37,7 @@ openai.api_key = os.getenv("OPENAI_API_KEY")
 # Set page configuration
 st.set_page_config(
     page_title="Maya Lingo",
-    layout="wide",
-    initial_sidebar_state="collapsed",
-    menu_items={
-        'Get Help': None,
-        'Report a Bug': None,
-        'About': None,
-    }
+    layout="wide",    
 )
 
 
