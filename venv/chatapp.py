@@ -13,6 +13,10 @@ from docx import Document
 from datetime import datetime
 import random
 
+# Hide the Streamlit header and footer
+hide_st_style = """
+#MainMenu, header, footer {visibility: hidden;}
+"""
 
 # Load environment variables from .env file
 dotenv_path = "PycharmProjects/.env"
