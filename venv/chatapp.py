@@ -126,6 +126,25 @@ if selected_language != 'Select...':
             greeting_translated = translator_from_en.translate(greeting)
             st.session_state.hst_chat.append({"role": "assistant", "content": greeting_translated})
             st.session_state.hst_chat_time.append(datetime.now())
+    
+    # Get user input
+    prompt = st.chat_input("Say something")
+    if prompt:
+        new_message = {"role": "user", "content": prompt}
+    else:
+        new_message = None
+
+    # Check if a new message was submitted
+    if new_message:
+        # Translate user's input to English
+        user_prompt_translated = translator_to_en.translate(new_message['content'])
+
+        # Add user's translated response to the chat history
+        st.session_state.hst_chat.append({"role": "user", "content": user_prompt_translated})
+
+        # Add user's translated response to the conversation
+        conversation.append({"role": "user", "content": user_prompt_translated})
+
 else:
     st.session_state.selected_task = None  # Set to None or some default value
 
@@ -160,21 +179,7 @@ st.session_state.selected_task = selected_task
 
 
 
-# Get user input
-prompt = st.chat_input("Say something")
-if prompt:
-    new_message = {"role": "user", "content": prompt}
-else:
-    new_message = None
 
-
-# Check if a new message was submitted
-if new_message:
-    # Translate user's input to English
-    user_prompt_translated = translator_to_en.translate(new_message['content'])
-
-    # Add user's translated response to the chat history
-    st.session_state.hst_chat.append({"role": "user", "content": user_prompt_translated})
 
 
 MAX_TOKENS = 500
