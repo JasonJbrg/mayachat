@@ -13,7 +13,6 @@ from docx import Document
 from datetime import datetime
 import random
 
-
 # Load environment variables from .env file
 dotenv_path = "PycharmProjects/.env"
 load_dotenv(dotenv_path)
@@ -21,6 +20,9 @@ load_dotenv(dotenv_path)
 # Read the config.json file
 with open("venv/config.json") as file:
     config = json.load(file)
+
+
+
 
 # Extract the values from the config dictionary
 task_selection = config["task_selection"]
@@ -38,45 +40,19 @@ openai.api_key = os.getenv("OPENAI_API_KEY")
 # Set page configuration
 st.set_page_config(
     page_title="Maya Lingo",
-    layout="wide",
-    initial_sidebar_state="collapsed"
+    layout="wide",    
 )
 
-# Define the CSS styles
-streamlit_style = """
-    <style>
-    @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono&display=swap');
+hide_streamlit_style = """
+            <style>
+            #MainMenu {visibility: hidden;}
+            footer {visibility: hidden;}
+            header {visibility: hidden;}
+            </style>
+            """
+st.markdown(hide_streamlit_style, unsafe_allow_html=True) 
 
-    #root {
-        font-family: 'IBM Plex Mono', monospace !important;
-        background-color: #4F5223 !important;
-        color: white !important;
-    }
-    .custom-title {
-        overflow: hidden;
-        color: white;
-        font-size: 1.3em;
-        animation: typewriter 4s steps(50) 1s both;
-        white-space: nowrap;
-        padding-bottom: 50px;
 
-    }
-         /* Hide the Streamlit footer */
-    .reportview-container .main footer {
-        visibility: hidden;
-    }
-
-    }
-    @keyframes typewriter {
-        0% {
-            width: 0;
-        }
-        100% {
-            width: 100%;
-        }
-    }
-    </style>
-"""
 # Add a default option to the languages dictionary
 languages = {'Select...': ''}
 
@@ -168,8 +144,8 @@ if new_message is not None:
 
 
 
-# Apply styles
-st.markdown(streamlit_style, unsafe_allow_html=True)
+
+
 
 # Add a default option to the task_selection list
 task_selection = ['Select...'] + task_selection
