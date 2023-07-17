@@ -48,6 +48,10 @@ hide_streamlit_style = """
             #MainMenu {visibility: hidden;}
             footer {visibility: hidden;}
             header {visibility: hidden;}
+            body {
+                font-family: 'IBM Plex Mono', monospace;
+                background-color: #4F5223;
+            }
             
             </style>
             """
