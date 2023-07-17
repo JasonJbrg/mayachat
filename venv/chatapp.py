@@ -48,6 +48,7 @@ hide_streamlit_style = """
             #MainMenu {visibility: hidden;}
             footer {visibility: hidden;}
             header {visibility: hidden;}
+            
             </style>
             """
 st.markdown(hide_streamlit_style, unsafe_allow_html=True) 
@@ -109,38 +110,39 @@ if selected_language != 'Select...':
             st.session_state.hst_chat_time.append(datetime.now())
     
 # Get user input
-prompt = st.chat_input("Say something")
-if prompt:
-    new_message = {"role": "user", "content": prompt}
-        
-# Initialize conversation in session state if not already present
-if 'conversation' not in st.session_state:
-    st.session_state.conversation = []
-
-# Check if a new message was submitted
-if new_message is not None:
-    # Add user's original response to the chat history
-    st.session_state.hst_chat.append(new_message)
-    st.session_state.hst_chat_time.append(datetime.now())
-
-    # Add user's response to the conversation
-    st.session_state.conversation.append(new_message)
-
-    # Only generate a response if the last message was from the user
-    if len(st.session_state.hst_chat) >= 2 and st.session_state.hst_chat[-2]["role"] == "user":
-        # Use OpenAI API to get a response from the chat model
-        return_openai = openai.ChatCompletion.create(
-            model="gpt-3.5-turbo",
-            messages=st.session_state.conversation,
-            max_tokens=MAX_TOKENS,
-            n=1
-        )
-
-        # Add assistant's response to the chat history
-        if return_openai:
-            assistant_response = return_openai['choices'][0]['message']['content']
-            st.session_state.hst_chat.append({"role": "assistant", "content": assistant_response})
-            st.session_state.hst_chat_time.append(datetime.now())
+if 'selected_task' in st.session_state:
+    prompt = st.chat_input("Say something")
+    if prompt:
+        new_message = {"role": "user", "content": prompt}
+            
+    # Initialize conversation in session state if not already present
+    if 'conversation' not in st.session_state:
+        st.session_state.conversation = []
+    
+    # Check if a new message was submitted
+    if new_message is not None:
+        # Add user's original response to the chat history
+        st.session_state.hst_chat.append(new_message)
+        st.session_state.hst_chat_time.append(datetime.now())
+    
+        # Add user's response to the conversation
+        st.session_state.conversation.append(new_message)
+    
+        # Only generate a response if the last message was from the user
+        if len(st.session_state.hst_chat) >= 2 and st.session_state.hst_chat[-2]["role"] == "user":
+            # Use OpenAI API to get a response from the chat model
+            return_openai = openai.ChatCompletion.create(
+                model="gpt-3.5-turbo",
+                messages=st.session_state.conversation,
+                max_tokens=MAX_TOKENS,
+                n=1
+            )
+    
+            # Add assistant's response to the chat history
+            if return_openai:
+                assistant_response = return_openai['choices'][0]['message']['content']
+                st.session_state.hst_chat.append({"role": "assistant", "content": assistant_response})
+                st.session_state.hst_chat_time.append(datetime.now())
 
 
 
