@@ -136,7 +136,10 @@ if selected_language != 'Select...':
     prompt = st.chat_input("Say something")
     if prompt:
         new_message = {"role": "user", "content": prompt}
-    
+        
+# Initialize conversation in session state if not already present
+if 'conversation' not in st.session_state:
+    st.session_state.conversation = []
 
 # Check if a new message was submitted
 if new_message is not None:
@@ -148,14 +151,14 @@ if new_message is not None:
     st.session_state.hst_chat_time.append(datetime.now())
 
     # Add user's translated response to the conversation
-    conversation.append({"role": "user", "content": user_prompt_translated})
+    st.session_state.conversation.append({"role": "user", "content": user_prompt_translated})
 
     # Only generate a response if the last message was from the user
     if len(st.session_state.hst_chat) >= 2 and st.session_state.hst_chat[-2]["role"] == "user":
         # Use OpenAI API to get a response from the chat model
         return_openai = openai.ChatCompletion.create(
             model="gpt-3.5-turbo",
-            messages=conversation,
+            messages=st.session_state.conversation,
             max_tokens=MAX_TOKENS,
             n=1
         )
@@ -165,6 +168,7 @@ if new_message is not None:
             assistant_response = return_openai['choices'][0]['message']['content']
             st.session_state.hst_chat.append({"role": "assistant", "content": assistant_response})
             st.session_state.hst_chat_time.append(datetime.now())
+
 
 # Apply styles
 st.markdown(streamlit_style, unsafe_allow_html=True)
