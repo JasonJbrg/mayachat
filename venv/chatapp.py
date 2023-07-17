@@ -95,6 +95,11 @@ languages.update({
 selected_language = 'Select...'
 selected_task = 'Select...'
 
+
+# Initialize new_message and return_openai to None
+new_message = None
+return_openai = None
+
 # Get user input for language selection
 selected_language = st.selectbox("Select your language", list(languages.keys()), key='language_selection')
 
@@ -131,15 +136,13 @@ if selected_language != 'Select...':
     prompt = st.chat_input("Say something")
     if prompt:
         new_message = {"role": "user", "content": prompt}
-    else:
-        new_message = None
+    
 
-    # Check if a new message was submitted
-    print(f"new_message is defined: {'new_message' in locals()}")
-    print(f"new_message: {new_message}")
+   # Check if a new message was submitted
     if new_message:
         # Translate user's input to English
         user_prompt_translated = translator_to_en.translate(new_message['content'])
+
 
         # Add user's translated response to the chat history
         st.session_state.hst_chat.append({"role": "user", "content": user_prompt_translated})
@@ -181,7 +184,8 @@ st.session_state.selected_task = selected_task
 
 
 
-
+# Initialize conversation to an empty list
+conversation = []
 
 
 MAX_TOKENS = 500
@@ -207,7 +211,7 @@ else:
 
 
 # Only generate a response if the last message was from the user
-if conversation[-1]["role"] == "user":
+if conversation and conversation[-1]["role"] == "user":
     # Use OpenAI API to get a response from the chat model
     return_openai = openai.ChatCompletion.create(
         model="gpt-3.5-turbo",
@@ -222,7 +226,7 @@ if conversation[-1]["role"] == "user":
 
 if new_message:
     # Translate user's input to English
-    user_prompt_translated = translator_to_en.translate(user_prompt)
+    user_prompt_translated = translator_to_en.translate(new_message['content'])
 
     # Add user's translated response to the chat history
     st.session_state.hst_chat.append({"role": "user", "content": user_prompt_translated})
@@ -232,7 +236,7 @@ if new_message:
     conversation.append({"role": "user", "content": user_prompt_translated})
 
     # Only generate a response if the last message was from the user
-    if st.session_state.hst_chat[-2]["role"] == "user":
+    if len(st.session_state.hst_chat) >= 2 and st.session_state.hst_chat[-2]["role"] == "user":
         # Use OpenAI API to get a response from the chat model
         return_openai = openai.ChatCompletion.create(
             model="gpt-3.5-turbo",
@@ -241,10 +245,11 @@ if new_message:
             n=1
         )
 
-        # Add assistant's response to the chat history
-        assistant_response = return_openai['choices'][0]['message']['content']
-        st.session_state.hst_chat.append({"role": "assistant", "content": assistant_response})
-        st.session_state.hst_chat_time.append(datetime.now())
+       # Add assistant's response to the chat history
+        if return_openai:
+            assistant_response = return_openai['choices'][0]['message']['content']
+            st.session_state.hst_chat.append({"role": "assistant", "content": assistant_response})
+            st.session_state.hst_chat_time.append(datetime.now())
 
     
 
