@@ -143,15 +143,12 @@ if 'conversation' not in st.session_state:
 
 # Check if a new message was submitted
 if new_message is not None:
-    # Translate user's input to English
-    user_prompt_translated = translator_to_en.translate(new_message['content'])
-
-    # Add user's original response (not translated) to the chat history
-    st.session_state.hst_chat.append({"role": "user", "content": prompt, "original_content": prompt})
+    # Add user's original response to the chat history
+    st.session_state.hst_chat.append(new_message)
     st.session_state.hst_chat_time.append(datetime.now())
 
-    # Add user's translated response to the conversation
-    st.session_state.conversation.append({"role": "user", "content": user_prompt_translated})
+    # Add user's response to the conversation
+    st.session_state.conversation.append(new_message)
 
     # Only generate a response if the last message was from the user
     if len(st.session_state.hst_chat) >= 2 and st.session_state.hst_chat[-2]["role"] == "user":
