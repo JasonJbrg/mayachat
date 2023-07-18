@@ -101,7 +101,7 @@ if selected_language != 'Select Language':
     task_selection = ['Select Topic'] + task_selection
 
     # Get user input for task selection
-    selected_task = st.selectbox("Select a task", task_selection, key='task_selection')
+    selected_task = st.selectbox(" ", task_selection, key='task_selection')
 
     # Only update the selected task in session state if a task is selected
     if selected_task != 'Select Topic':
