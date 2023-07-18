@@ -64,14 +64,6 @@ st.markdown("""
                 font-family: 'IBM Plex Mono', monospace;
                 background-color: #4F5223;
             }
-
-            .stChatFloatingInputContainer {
-                font-family: 'IBM Plex Mono', monospace;
-                background-color: #4F5223 !important;
-            }
-
-
-
             #MainMenu {visibility: hidden;}
             footer {visibility: hidden;}
             header {visibility: hidden;}
@@ -80,6 +72,16 @@ st.markdown("""
     </script>
     """, unsafe_allow_html=True)
 
+st.script("""
+    const style = document.createElement('style');
+    style.textContent = `
+        .stChatFloatingInputContainer.css-usj992.ehod42b2 {
+            font-family: 'IBM Plex Mono', monospace;
+            background-color: #4F5223 !important;
+        }
+    `;
+    document.head.append(style);
+""")
 
 # Custom title
 st.markdown("""
