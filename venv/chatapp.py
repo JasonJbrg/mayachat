@@ -42,30 +42,27 @@ st.set_page_config(
     layout="wide",    
 )
 
-st.markdown("""
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono&display=swap');
+hide_streamlit_style = """
+            <style>
+            @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono&display=swap');
+            
+            .css-uf99v8 {
+                font-family: 'IBM Plex Mono', monospace;
+                background-color: #4F5223;
+               
+            }
 
-        .css-uf99v8 {
-            font-family: 'IBM Plex Mono', monospace;
-            background-color: #4F5223;
-        }
-
-        #MainMenu {visibility: hidden;}
-        footer {visibility: hidden;}
-        header {visibility: hidden;}
-    </style>
-    <script>
-    const style = document.createElement('style');
-    style.innerHTML = `
-        .stChatFloatingInputContainer {
-            font-family: 'IBM Plex Mono', monospace;
-            background-color: #4F5223 !important;
-        }
-    `;
-    document.head.appendChild(style);
-    </script>
-    """, unsafe_allow_html=True)
+            .stChatFloatingInputContainer.css-usj992.ehod42b2 {
+                font-family: 'IBM Plex Mono', monospace;
+                background-color: #4F5223;
+            }
+    
+            #MainMenu {visibility: hidden;}
+            footer {visibility: hidden;}
+            header {visibility: hidden;}
+            </style>
+            """
+st.markdown(hide_streamlit_style, unsafe_allow_html=True) 
 
 # Custom title
 st.markdown("""
@@ -83,8 +80,6 @@ st.markdown("""
         <p style="margin: 0; text-align: left;">Airman Allie</p>
     </div>
     """, unsafe_allow_html=True)
-
-
 
 
 
