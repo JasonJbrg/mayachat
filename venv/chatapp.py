@@ -42,27 +42,42 @@ st.set_page_config(
     layout="wide",    
 )
 
-hide_streamlit_style = """
-            <style>
+st.markdown("""
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono&display=swap');
+
+        .css-uf99v8 {
+            font-family: 'IBM Plex Mono', monospace;
+            background-color: #4F5223;
+        }
+
+        #MainMenu {visibility: hidden;}
+        footer {visibility: hidden;}
+        header {visibility: hidden;}
+    </style>
+    <script>
+        const style = document.createElement('style');
+        style.textContent = `
             @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono&display=swap');
-            
+
             .css-uf99v8 {
                 font-family: 'IBM Plex Mono', monospace;
                 background-color: #4F5223;
-               
             }
 
-            .stChatFloatingInputContainer.css-usj992.ehod42b2 {
+            .stChatFloatingInputContainer {
                 font-family: 'IBM Plex Mono', monospace;
-                background-color: #4F5223;
+                background-color: #4F5223 !important;
             }
-    
+
             #MainMenu {visibility: hidden;}
             footer {visibility: hidden;}
             header {visibility: hidden;}
-            </style>
-            """
-st.markdown(hide_streamlit_style, unsafe_allow_html=True) 
+        `;
+        document.head.append(style);
+    </script>
+    """, unsafe_allow_html=True)
+
 
 # Custom title
 st.markdown("""
