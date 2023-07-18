@@ -70,10 +70,11 @@ st.markdown("""
         background-color: black;
         padding: 10px;
         font-family: 'IBM Plex Mono', monospace;
-        font-size: 20px;
+        font-size: 10px;
         color: white;
     ">
-        Welcome, Airman Allie
+        Welcome, 
+        Airman Allie
     </div>
     """, unsafe_allow_html=True)
 
