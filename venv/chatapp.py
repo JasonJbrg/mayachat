@@ -74,7 +74,7 @@ st.markdown("""
 
 st.script("""
     const style = document.createElement('style');
-    style.textContent = `
+    style.innerHTML = `
         .stChatFloatingInputContainer.css-usj992.ehod42b2 {
             font-family: 'IBM Plex Mono', monospace;
             background-color: #4F5223 !important;
@@ -82,6 +82,7 @@ st.script("""
     `;
     document.head.append(style);
 """)
+
 
 # Custom title
 st.markdown("""
