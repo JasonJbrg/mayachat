@@ -23,7 +23,6 @@ with open("venv/config.json") as file:
 
 
 
-
 # Extract the values from the config dictionary
 task_selection = config["task_selection"]
 initial_context = {
@@ -64,6 +63,25 @@ hide_streamlit_style = """
             </style>
             """
 st.markdown(hide_streamlit_style, unsafe_allow_html=True) 
+
+# Custom title
+st.markdown("""
+    <div style="
+        background-color: black;
+        padding: 5px;
+        font-family: 'IBM Plex Mono', monospace;
+        font-size: 35px;
+        color: white;
+        margin-top: -90px;
+        width: 100%;
+        font-weight: bold;
+    ">
+        <p style="margin: 0; text-align: left;">Welcome,</p>
+        <p style="margin: 0; text-align: left;">Airman Allie</p>
+    </div>
+    """, unsafe_allow_html=True)
+
+
 
 
 # Add a default option to the languages dictionary
