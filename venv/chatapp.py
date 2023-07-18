@@ -75,7 +75,7 @@ st.markdown("""
         margin-top: -90px;
         width: 100%;
         font-weight: bold;
-        left: -20%;
+        left: -10%;
         position: relative;
     ">
         <p style="margin: 0; text-align: left;">Welcome,</p>
