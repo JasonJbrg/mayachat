@@ -87,7 +87,7 @@ new_message = None
 return_openai = None
 
 # Get user input for language selection
-selected_language = st.selectbox("", list(languages.keys()), key='language_selection')
+selected_language = st.selectbox(list(languages.keys()), key='language_selection')
 
 if selected_language != 'Select Language':
     # Initialize the Translator with the selected language
