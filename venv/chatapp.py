@@ -50,7 +50,7 @@ st.script("""
             background-color: #4F5223 !important;
         }
     `;
-    document.head.appendChild(style);
+    document.head.append(style);
 """)
 
 st.markdown("""
