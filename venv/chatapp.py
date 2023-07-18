@@ -70,9 +70,10 @@ st.markdown("""
         background-color: black;
         padding: 5px;
         font-family: 'IBM Plex Mono', monospace;
-        font-size: 20px;
+        font-size: 25px;
         color: white;
-        margin-top: -70px;
+        margin-top: -90px;
+        width: 100%;
     ">
         <p style="margin: 0; text-align: left;">Welcome,</p>
         <p style="margin: 0; text-align: left;">Airman Allie</p>
