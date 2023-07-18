@@ -42,6 +42,17 @@ st.set_page_config(
     layout="wide",    
 )
 
+st.script("""
+    const style = document.createElement('style');
+    style.innerHTML = `
+        .stChatFloatingInputContainer {
+            font-family: 'IBM Plex Mono', monospace;
+            background-color: #4F5223 !important;
+        }
+    `;
+    document.head.appendChild(style);
+""")
+
 st.markdown("""
     <style>
         @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono&display=swap');
