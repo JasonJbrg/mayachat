@@ -73,7 +73,7 @@ st.markdown("""
         font-size: 35px;
         color: white;
         margin-top: -90px;
-        width: 100%;
+        width: 150%;
         font-weight: bold;
         left: -50%;
         position: relative;
