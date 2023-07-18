@@ -73,9 +73,8 @@ st.markdown("""
         font-size: 35px;
         color: white;
         margin-top: -90px;
-        width: 130%;
+        width: 100%;
         font-weight: bold;
-        left: -10%;
     ">
         <p style="margin: 0; text-align: left;">Welcome,</p>
         <p style="margin: 0; text-align: left;">Airman Allie</p>
