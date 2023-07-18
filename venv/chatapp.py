@@ -64,7 +64,19 @@ hide_streamlit_style = """
             """
 st.markdown(hide_streamlit_style, unsafe_allow_html=True) 
 
-st.title('Welcome, Airman Allie')
+# Custom title
+st.markdown("""
+    <div style="
+        background-color: black;
+        padding: 10px;
+        border-radius: 10px;
+        font-family: 'IBM Plex Mono', monospace;
+        font-size: 20px;
+        color: white;
+    ">
+        Welcome, Airman Allie
+    </div>
+    """, unsafe_allow_html=True)
 
 
 # Add a default option to the languages dictionary
