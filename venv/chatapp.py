@@ -64,7 +64,7 @@ st.markdown(hide_streamlit_style, unsafe_allow_html=True)
 
 
 # Add a default option to the languages dictionary
-languages = {'Select...': ''}
+languages = {'Select Language': ''}
 
 languages.update({
     'Chinese': 'zh',
@@ -78,7 +78,7 @@ languages.update({
 })
 
 # Define default values for selected_language and selected_task
-selected_language = 'Select...'
+selected_language = 'Select Language'
 selected_task = 'Select...'
 
 
@@ -89,7 +89,7 @@ return_openai = None
 # Get user input for language selection
 selected_language = st.selectbox("Select your language", list(languages.keys()), key='language_selection')
 
-if selected_language != 'Select...':
+if selected_language != 'Select Language':
     # Initialize the Translator with the selected language
     translator = Translator(to_lang="en", from_lang=languages[selected_language])
 
