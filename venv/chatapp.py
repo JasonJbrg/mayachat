@@ -68,11 +68,11 @@ st.markdown(hide_streamlit_style, unsafe_allow_html=True)
 st.markdown("""
     <div style="
         background-color: black;
-        padding: 10px;
+        padding: 5px;
         font-family: 'IBM Plex Mono', monospace;
         font-size: 20px;
         color: white;
-        margin-top: -50px;
+        margin-top: -70px;
     ">
         <p style="margin: 0; text-align: left;">Welcome,</p>
         <p style="margin: 0; text-align: left;">Airman Allie</p>
