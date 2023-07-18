@@ -43,19 +43,6 @@ st.set_page_config(
 )
 
 st.markdown("""
-    <script>
-    const style = document.createElement('style');
-    style.innerHTML = `
-        .stChatFloatingInputContainer {
-            font-family: 'IBM Plex Mono', monospace;
-            background-color: #4F5223 !important;
-        }
-    `;
-    document.head.append(style);
-    </script>
-    """, unsafe_allow_html=True)
-
-st.markdown("""
     <style>
         @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono&display=swap');
 
@@ -68,6 +55,16 @@ st.markdown("""
         footer {visibility: hidden;}
         header {visibility: hidden;}
     </style>
+    <script>
+    const style = document.createElement('style');
+    style.innerHTML = `
+        .stChatFloatingInputContainer {
+            font-family: 'IBM Plex Mono', monospace;
+            background-color: #4F5223 !important;
+        }
+    `;
+    document.head.appendChild(style);
+    </script>
     """, unsafe_allow_html=True)
 
 # Custom title
@@ -86,6 +83,7 @@ st.markdown("""
         <p style="margin: 0; text-align: left;">Airman Allie</p>
     </div>
     """, unsafe_allow_html=True)
+
 
 
 
