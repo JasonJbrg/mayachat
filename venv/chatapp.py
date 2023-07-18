@@ -45,6 +45,16 @@ st.set_page_config(
 
 hide_streamlit_style = """
             <style>
+            @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono&display=swap');
+            
+            .css-uf99v8 {
+                font-family: 'IBM Plex Mono', monospace;
+                background-color: #4F5223;
+               
+            }
+            .css-q8sbsg.p {
+                color: white;
+            }
             #MainMenu {visibility: hidden;}
             footer {visibility: hidden;}
             header {visibility: hidden;}
