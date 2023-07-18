@@ -53,7 +53,7 @@ hide_streamlit_style = """
                
             }
 
-            .stChatFloatingInputContainer.css-usj992.ehod42b2 {
+            .css-ij3fm0 {
                 font-family: 'IBM Plex Mono', monospace;
                 background-color: #4F5223;
             
