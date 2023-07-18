@@ -65,7 +65,7 @@ st.markdown("""
                 background-color: #4F5223;
             }
 
-            .stChatFloatingInputContainer.css-usj992.ehod42b2 {
+            .stChatFloatingInputContainer {
                 font-family: 'IBM Plex Mono', monospace;
                 background-color: #4F5223 !important;
             }
