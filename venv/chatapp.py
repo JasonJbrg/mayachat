@@ -45,16 +45,6 @@ st.set_page_config(
 
 hide_streamlit_style = """
             <style>
-            @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono&display=swap');
-            
-            .css-uf99v8 {
-                font-family: 'IBM Plex Mono', monospace;
-                background-color: #4F5223;
-               
-            }
-            .css-q8sbsg.p {
-                color: white;
-            }
             #MainMenu {visibility: hidden;}
             footer {visibility: hidden;}
             header {visibility: hidden;}
@@ -78,8 +68,8 @@ languages.update({
 })
 
 # Define default values for selected_language and selected_task
-selected_language = 'Select Language'
-selected_task = 'Select Topic'
+selected_language = 'Select...'
+selected_task = 'Select...'
 
 
 # Initialize new_message and return_openai to None
@@ -87,9 +77,9 @@ new_message = None
 return_openai = None
 
 # Get user input for language selection
-selected_language = st.selectbox('Select a language', list(languages.keys()), key='language_selection')
+selected_language = st.selectbox("Select your language", list(languages.keys()), key='language_selection')
 
-if selected_language != 'Select Language':
+if selected_language != 'Select...':
     # Initialize the Translator with the selected language
     translator = Translator(to_lang="en", from_lang=languages[selected_language])
 
@@ -98,13 +88,13 @@ if selected_language != 'Select Language':
     translator_from_en = Translator(from_lang="en", to_lang=languages[selected_language])
 
     # Add a default option to the task_selection list
-    task_selection = ['Select Topic'] + task_selection
+    task_selection = ['Select...'] + task_selection
 
     # Get user input for task selection
-    selected_task = st.selectbox(task_selection, key='task_selection')
+    selected_task = st.selectbox("Select a task", task_selection, key='task_selection')
 
     # Only update the selected task in session state if a task is selected
-    if selected_task != 'Select Topic':
+    if selected_task != 'Select...':
         st.session_state.selected_task = selected_task
 
         # Only proceed if a task is selected and the chat history is empty
@@ -119,39 +109,38 @@ if selected_language != 'Select Language':
             st.session_state.hst_chat_time.append(datetime.now())
     
 # Get user input
-if 'selected_task' in st.session_state:
-    prompt = st.chat_input("Say something")
-    if prompt:
-        new_message = {"role": "user", "content": prompt}
-            
-    # Initialize conversation in session state if not already present
-    if 'conversation' not in st.session_state:
-        st.session_state.conversation = []
-    
-    # Check if a new message was submitted
-    if new_message is not None:
-        # Add user's original response to the chat history
-        st.session_state.hst_chat.append(new_message)
-        st.session_state.hst_chat_time.append(datetime.now())
-    
-        # Add user's response to the conversation
-        st.session_state.conversation.append(new_message)
-    
-        # Only generate a response if the last message was from the user
-        if len(st.session_state.hst_chat) >= 2 and st.session_state.hst_chat[-2]["role"] == "user":
-            # Use OpenAI API to get a response from the chat model
-            return_openai = openai.ChatCompletion.create(
-                model="gpt-3.5-turbo",
-                messages=st.session_state.conversation,
-                max_tokens=MAX_TOKENS,
-                n=1
-            )
-    
-            # Add assistant's response to the chat history
-            if return_openai:
-                assistant_response = return_openai['choices'][0]['message']['content']
-                st.session_state.hst_chat.append({"role": "assistant", "content": assistant_response})
-                st.session_state.hst_chat_time.append(datetime.now())
+prompt = st.chat_input("Say something")
+if prompt:
+    new_message = {"role": "user", "content": prompt}
+        
+# Initialize conversation in session state if not already present
+if 'conversation' not in st.session_state:
+    st.session_state.conversation = []
+
+# Check if a new message was submitted
+if new_message is not None:
+    # Add user's original response to the chat history
+    st.session_state.hst_chat.append(new_message)
+    st.session_state.hst_chat_time.append(datetime.now())
+
+    # Add user's response to the conversation
+    st.session_state.conversation.append(new_message)
+
+    # Only generate a response if the last message was from the user
+    if len(st.session_state.hst_chat) >= 2 and st.session_state.hst_chat[-2]["role"] == "user":
+        # Use OpenAI API to get a response from the chat model
+        return_openai = openai.ChatCompletion.create(
+            model="gpt-3.5-turbo",
+            messages=st.session_state.conversation,
+            max_tokens=MAX_TOKENS,
+            n=1
+        )
+
+        # Add assistant's response to the chat history
+        if return_openai:
+            assistant_response = return_openai['choices'][0]['message']['content']
+            st.session_state.hst_chat.append({"role": "assistant", "content": assistant_response})
+            st.session_state.hst_chat_time.append(datetime.now())
 
 
 
@@ -365,4 +354,3 @@ if st.session_state.hst_chat:
             file_name=f.name,
             mime='application/vnd.openxmlformats-officedocument.wordprocessingml.document'
         )
-
