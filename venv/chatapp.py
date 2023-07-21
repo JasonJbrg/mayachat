@@ -100,7 +100,7 @@ languages.update({
 
 # Define default values for selected_language and selected_task
 selected_language = 'Select Language'
-selected_task = 'Select Topic'
+selected_task = 'What do you want to talk about?'
 
 
 # Initialize new_message and return_openai to None
@@ -119,13 +119,13 @@ if selected_language != 'Select Language':
     translator_from_en = Translator(from_lang="en", to_lang=languages[selected_language])
 
     # Add a default option to the task_selection list
-    task_selection = ['Select Topic'] + task_selection
+    task_selection = ['What do you want to talk about?'] + task_selection
 
     # Get user input for task selection
     selected_task = st.selectbox(" ", task_selection, key='task_selection')
 
     # Only update the selected task in session state if a task is selected
-    if selected_task != 'Select Topic':
+    if selected_task != 'What do you want to talk about?':
         st.session_state.selected_task = selected_task
 
         # Only proceed if a task is selected and the chat history is empty
@@ -180,7 +180,7 @@ if 'selected_task' in st.session_state:
 
 
 # Add a default option to the task_selection list
-task_selection = ['Select Topic'] + task_selection
+task_selection = ['What do you want to talk about?'] + task_selection
 
 # Initialize chat history in session state if not already present
 if 'hst_chat' not in st.session_state:
@@ -189,7 +189,7 @@ if 'hst_chat_time' not in st.session_state:
     st.session_state.hst_chat_time = []
 
 # Only proceed if a task is selected and the chat history is empty
-if selected_task != 'Select Topic' and not st.session_state.hst_chat:
+if selected_task != 'What do you want to talk about?' and not st.session_state.hst_chat:
     # Update the selected task in session state
     st.session_state.selected_task = selected_task
     # Choose a random greeting for the selected task
